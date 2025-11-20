@@ -93,35 +93,48 @@ while True:
     elif scelta=="c":
         matr=input("Matricola: ")
         if matr in lista_alunni:
-            print("Cosa vuoi modificare?")
-            print("n) nome")
-            print("c) cognome")
-            print("e) e-mail")
-            opzione=input("Inserisci l'opzione desiderata: ").lower()
-            if opzione=="n":
-                new_name=input("Nuovo nome: ")
-                lista_alunni[matr]["nome"]=new_name
-            elif opzione=="c":
-                new_cognome=input("Nuovo cognome: ")
-                lista_alunni[matr]["cognome"]=new_cognome
-            elif opzione=="e":
-                new_email=input("Nuova e-mail: ")
-                if check(new_email):
-                    lista_alunni[matr]["email"]=new_email
+            modifica="s"
+            while modifica=="s":
+                print("Cosa vuoi modificare?")
+                print("n) nome")
+                print("c) cognome")
+                print("e) e-mail")
+                opzione=input("Inserisci l'opzione desiderata: ").lower()
+                if opzione=="n":
+                    new_name=input("Nuovo nome: ")
+                    lista_alunni[matr]["nome"]=new_name
+                elif opzione=="c":
+                    new_cognome=input("Nuovo cognome: ")
+                    lista_alunni[matr]["cognome"]=new_cognome
+                elif opzione=="e":
+                    new_email=input("Nuova e-mail: ")
+                    if check(new_email):
+                        lista_alunni[matr]["email"]=new_email
+                    else:
+                        print("❌ Formato e-mail errato!")
+                        continue
                 else:
-                    print("❌ Formato e-mail errato!")
+                    print("❌ Scelta errata!")
                     continue
-            else:
-                print("❌ Scelta errata!")
-                continue
-            lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            salva_alunni()
-            print("✅ Dati modificati con successo!")
+                lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                salva_alunni()
+                print("✅ Dati modificati con successo!")
+                modifica=input(f"Vuoi modificare altri dati della matricola {matr}? (s)ì/(n)o: ").lower()
+                while modifica not in ["s", "n"]:
+                    modifica = input("Risposta non valida! Digita 's' o 'n': ").lower()
         else:
             print("❌ La matricola indicata non è presente!")
     elif scelta=="d":
         matr=input("Matricola: ")
         if matr in lista_alunni:
+            if lista_alunni[matr]["archiviato"]:
+                print("⚠️ Lo studente è già archiviato!")
+                elimina = input("Vuoi eliminarlo definitivamente? (s/n): ").lower()
+                if elimina == "s":
+                    lista_alunni.pop(matr)
+                    salva_alunni()
+                    print("✅ Alunno eliminato con successo!")
+                continue
             soft=input("Vuoi (a)rchiviarlo o (e)limarlo definitivamente?: ")
             if soft=="a":
                 lista_alunni[matr]["archiviato"] = True
