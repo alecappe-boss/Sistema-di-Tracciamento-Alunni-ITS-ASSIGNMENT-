@@ -1,5 +1,7 @@
-from datetime import datetime
+import os
+import json
 import re
+from datetime import datetime
 
 lista_alunni = {
 
@@ -9,12 +11,27 @@ lista_compiti = {
     
 }
 
+alunni="lista_alunni.json"
+
+compiti="lista_compiti.json"
+
+if os.path.exists(alunni):
+    with open(alunni, "r", encoding="utf-8") as file:
+        try:
+            lista_alunni = json.load(file)
+        except json.JSONDecodeError:
+            lista_alunni = {}
+
 def check(email):
     regex=r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     if re.fullmatch(regex, email):
         return True
     else:
         return False
+    
+def salva_alunni():
+    with open(alunni, "w", encoding="utf-8") as file:
+        json.dump(lista_alunni, file, indent=4, ensure_ascii=False)
 
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
@@ -53,6 +70,7 @@ while True:
             "data_modifica":ora,
             "archiviato": False
         }
+        salva_alunni()
         print(f"\n✅ Alunno '{nome} {cognome}' inserito con successo!")
         print(f"Matricola: {matricola}")
         print(f"Data creazione: {ora}")
@@ -83,23 +101,22 @@ while True:
             if opzione=="n":
                 new_name=input("Nuovo nome: ")
                 lista_alunni[matr]["nome"]=new_name
-                print("✅ Nome modificato con successo!")
-                lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             elif opzione=="c":
                 new_cognome=input("Nuovo cognome: ")
                 lista_alunni[matr]["cognome"]=new_cognome
-                print("✅ Cognome modificato con successo!")
-                lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             elif opzione=="e":
                 new_email=input("Nuova e-mail: ")
                 if check(new_email):
                     lista_alunni[matr]["email"]=new_email
-                    print("✅ E-mail modificata con successo!")
-                    lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 else:
                     print("❌ Formato e-mail errato!")
+                    continue
             else:
                 print("❌ Scelta errata!")
+                continue
+            lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            salva_alunni()
+            print("✅ Dati modificati con successo!")
         else:
             print("❌ La matricola indicata non è presente!")
     elif scelta=="d":
@@ -109,11 +126,13 @@ while True:
             if soft=="a":
                 lista_alunni[matr]["archiviato"] = True
                 lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                salva_alunni()
                 print("✅ L'alunno è stato archiviato!")
             elif soft=="e":
                 conferma = input(f"Sei sicuro di voler eliminare definitivamente {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}? (s/n): ").lower()
                 if conferma == "s":
                     lista_alunni.pop(matr)
+                    salva_alunni()
                     print("✅ Alunno eliminato con successo!")
                 else:
                     print("❌ Operazione annullata")
