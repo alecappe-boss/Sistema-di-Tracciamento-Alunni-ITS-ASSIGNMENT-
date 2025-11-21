@@ -3,13 +3,9 @@ import json
 import re
 from datetime import datetime
 
-lista_alunni = {
+lista_alunni = {}
 
-}
-
-lista_compiti = {
-    
-}
+lista_compiti = {}
 
 alunni="lista_alunni.json"
 
@@ -56,9 +52,20 @@ while True:
         nome=input("Nome: ")
         cognome=input("Cognome: ")
         email=input("Email: ")
-        while check(email) is False:
-            print("Indirizzo email non valido! Riprova")
-            email=input("Email: ")
+        while True:
+            while check(email) is False:
+                print("Indirizzo email non valido! Riprova")
+                email=input("Email: ")
+            if not email.endswith("allievi.itsdigitalacademy.it"):
+                opzione=input("Sei sicuro di voler inserire una mail esterna alla scuola? (s)ì/(n)o: ").lower()
+                while opzione not in ["s", "n"]:
+                    opzione=input("Inserisci un'opzione valida (s)ì/(n)o: ").lower()
+                if opzione == "s":
+                    break
+                else:
+                    email = input("Inserisci una nuova email: ")
+            else:
+                break
         matricola="MAT" + datetime.now().strftime("%Y%m%d%H%M%S")
         ora=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         lista_alunni[matricola]={
@@ -100,6 +107,8 @@ while True:
                 print("c) cognome")
                 print("e) e-mail")
                 opzione=input("Inserisci l'opzione desiderata: ").lower()
+                while opzione not in ["n", "c", "e"]:
+                    opzione=input("L'opzione inserita non esiste! Riprova: ").lower()
                 if opzione=="n":
                     new_name=input("Nuovo nome: ")
                     lista_alunni[matr]["nome"]=new_name
@@ -107,15 +116,22 @@ while True:
                     new_cognome=input("Nuovo cognome: ")
                     lista_alunni[matr]["cognome"]=new_cognome
                 elif opzione=="e":
-                    new_email=input("Nuova e-mail: ")
-                    if check(new_email):
-                        lista_alunni[matr]["email"]=new_email
-                    else:
-                        print("❌ Formato e-mail errato!")
-                        continue
-                else:
-                    print("❌ Scelta errata!")
-                    continue
+                    while True:
+                        new_email = input("Nuova e-mail: ")
+                        if not check(new_email):
+                            print("❌ Formato e-mail errato! Riprova.")
+                        elif not new_email.endswith("allievi.itsdigitalacademy.it"):
+                            conferma = input("Sei sicuro di voler inserire una mail esterna alla scuola? (s)ì/(n)o: ").lower()
+                            while conferma not in ["s", "n"]:
+                                conferma = input("Risposta non valida. Digita 's' o 'n': ").lower()
+                            if conferma == "s":
+                                lista_alunni[matr]["email"] = new_email
+                                break
+                            else:
+                                print("Inserisci un'altra email.")
+                        else:
+                            lista_alunni[matr]["email"] = new_email
+                            break
                 lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 salva_alunni()
                 print("✅ Dati modificati con successo!")
@@ -134,23 +150,23 @@ while True:
                     lista_alunni.pop(matr)
                     salva_alunni()
                     print("✅ Alunno eliminato con successo!")
-                continue
-            soft=input("Vuoi (a)rchiviarlo o (e)limarlo definitivamente?: ")
-            if soft=="a":
-                lista_alunni[matr]["archiviato"] = True
-                lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                salva_alunni()
-                print("✅ L'alunno è stato archiviato!")
-            elif soft=="e":
-                conferma = input(f"Sei sicuro di voler eliminare definitivamente {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}? (s/n): ").lower()
-                if conferma == "s":
-                    lista_alunni.pop(matr)
-                    salva_alunni()
-                    print("✅ Alunno eliminato con successo!")
-                else:
-                    print("❌ Operazione annullata")
             else:
-                print("❌ Scelta errata!")
+                soft=input("Vuoi (a)rchiviarlo o (e)limarlo definitivamente?: ")
+                if soft=="a":
+                    lista_alunni[matr]["archiviato"] = True
+                    lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    salva_alunni()
+                    print("✅ L'alunno è stato archiviato!")
+                elif soft=="e":
+                    conferma = input(f"Sei sicuro di voler eliminare definitivamente {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}? (s/n): ").lower()
+                    if conferma == "s":
+                        lista_alunni.pop(matr)
+                        salva_alunni()
+                        print("✅ Alunno eliminato con successo!")
+                    else:
+                        print("❌ Operazione annullata")
+                else:
+                    print("❌ Scelta errata!")
     elif scelta=="e":
         print()
     elif scelta=="f":
