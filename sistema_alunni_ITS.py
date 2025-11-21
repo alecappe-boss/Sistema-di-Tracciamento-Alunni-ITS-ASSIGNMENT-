@@ -29,6 +29,11 @@ def salva_alunni():
     with open(alunni, "w", encoding="utf-8") as file:
         json.dump(lista_alunni, file, indent=4, ensure_ascii=False)
 
+def salva_compiti():
+    with open(compiti, "w", encoding="utf-8") as file:
+        json.dump(lista_compiti, file, indent=4, ensure_ascii=False)
+
+
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
     print("""\nSeleziona un opzione:
@@ -168,7 +173,24 @@ while True:
                 else:
                     print("❌ Scelta errata!")
     elif scelta=="e":
-        print()
+        id="TASK" + datetime.now().strftime("%Y%m%d%H%M%S")
+        descrizione=input("Descrizione: ")
+        alunno_matricola=input("Matricola: ")
+        while alunno_matricola not in lista_alunni:
+            print("La matricola inserita non corrisponde a nessuno studente! Riprova")
+            alunno_matricola=input("Matricola: ")
+        data_assegnazione=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        lista_compiti[id]={
+            "id": id,
+            "descrizione": descrizione,
+            "alunno_matricola": alunno_matricola,
+            "stato": "assegnato",
+            "data_assegnazione": data_assegnazione
+        }
+        salva_compiti()
+        print(f"\n✅ Compito '{descrizione}' inserito con successo!")
+        print(f"Matricola: {alunno_matricola}")
+        print(f"Data assegnazione: {data_assegnazione}")
     elif scelta=="f":
         print()
     elif scelta=="g":
