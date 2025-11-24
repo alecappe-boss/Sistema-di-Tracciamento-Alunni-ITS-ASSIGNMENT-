@@ -18,6 +18,13 @@ if os.path.exists(alunni):
         except json.JSONDecodeError:
             lista_alunni = {}
 
+if os.path.exists(compiti):
+    with open(compiti, "r", encoding="utf-8") as file:
+        try:
+            lista_compiti = json.load(file)
+        except json.JSONDecodeError:
+            lista_compiti = {}
+
 def check(email):
     regex=r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     if re.fullmatch(regex, email):
@@ -172,31 +179,89 @@ while True:
                         print("❌ Operazione annullata")
                 else:
                     print("❌ Scelta errata!")
+        else:
+            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
     elif scelta=="e":
         id="TASK" + datetime.now().strftime("%Y%m%d%H%M%S")
         descrizione=input("Descrizione: ")
-        alunno_matricola=input("Matricola: ")
-        while alunno_matricola not in lista_alunni:
-            print("La matricola inserita non corrisponde a nessuno studente! Riprova")
-            alunno_matricola=input("Matricola: ")
+        matr=input("Matricola: ")
+        while matr not in lista_alunni:
+            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+            matr=input("Matricola: ")
         data_assegnazione=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         lista_compiti[id]={
             "id": id,
             "descrizione": descrizione,
-            "alunno_matricola": alunno_matricola,
+            "alunno_matricola": matr,
             "stato": "assegnato",
-            "data_assegnazione": data_assegnazione
+            "data_assegnazione": data_assegnazione,
+            "valutazione": -1
         }
         salva_compiti()
         print(f"\n✅ Compito '{descrizione}' inserito con successo!")
-        print(f"Matricola: {alunno_matricola}")
+        print(f"Matricola: {matr}")
         print(f"Data assegnazione: {data_assegnazione}")
     elif scelta=="f":
-        print()
+        id=input("ID compito: ")
+        if id in lista_compiti:
+            while True:
+                try:
+                    valutazione=float(input("Valutazione (0-10): "))
+                    while valutazione<3 or valutazione>10:
+                        print("❌ Devi insere una valutazione compreso tra 3 e 10!")
+                        valutazione=float(input("Valutazione (0-10): "))
+                    lista_compiti[id]["valutazione"]=valutazione
+                    lista_compiti[id]["stato"]="completato"
+                    salva_compiti()
+                    print(f"✅ Valutazione {valutazione} registrata con successo per il compito {id}!")
+                    break
+                except ValueError:
+                    print("❌ Devi inserire un valore numerico valido!")
+        else:
+            print("❌ L'ID inserito non corrisponde a nessun compito!")
     elif scelta=="g":
-        print()
+        matr=input("Matricola: ")
+        if matr in lista_alunni:
+            trovati=False
+            print(f"\n📋 Compiti di {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}:")
+            for compito in lista_compiti.values():
+                if compito["alunno_matricola"] == matr:
+                    trovati=True
+                    if compito["valutazione"]==-1:
+                        print(f"- ID: {compito['id']}, Descrizione: {compito['descrizione']}, Stato: {compito['stato']}")
+                    else:
+                        print(f"- ID: {compito['id']}, Descrizione: {compito['descrizione']}, Stato: {compito['stato']}, Valutazione: {compito['valutazione']}")
+            if not trovati:
+                print("⚠️ Nessun compito trovato per questo studente!")
+        else:
+            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
     elif scelta=="h":
-        print()
+        matr=input("Matricola: ")
+        somma=0
+        assegnato=0
+        completato=0
+        voti = []
+        if matr in lista_alunni:
+            for compito in lista_compiti.values():
+                if compito["alunno_matricola"] == matr:
+                    if compito["stato"]=="completato":
+                        completato+=1
+                        somma+=compito["valutazione"]
+                        voti.append(compito["valutazione"])
+                    else:
+                        assegnato+=1
+            print(f"\n📋 Statistiche di {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}:")
+            print(f"Compiti completati: {completato}")
+            print(f"Compiti assegnati ma non completati: {assegnato}")
+            if completato>0:
+                media=somma/(completato)
+                voto_min = min(voti)
+                voto_max = max(voti)
+                print(f"Media voti: {media:.2f}")
+                print(f"Voto minimo: {voto_min}")
+                print(f"Voto massimo: {voto_max}")
+        else:
+            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
     elif scelta=="i":
         print()
     elif scelta=="l":

@@ -16,5 +16,14 @@
         "data_creazione": "2025-11-21 12:18:06",
         "data_modifica": "2025-11-21 12:18:06",
         "archiviato": false
+    },
+    "MAT20251124163454": {
+        "nome": "Gemma",
+        "cognome": "Capovilla",
+        "email": "gemma.capo@gmail.com",
+        "matricola": "MAT20251124163454",
+        "data_creazione": "2025-11-24 16:34:54",
+        "data_modifica": "2025-11-24 16:34:54",
+        "archiviato": false
     }
 }
