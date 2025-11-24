@@ -208,12 +208,12 @@ while True:
                 try:
                     valutazione=float(input("Valutazione (0-10): "))
                     while valutazione<3 or valutazione>10:
-                        print("❌ Devi insere una valutazione compreso tra 3 e 10!")
+                        print("❌ Devi insere una valutazione compresa tra 3 e 10!")
                         valutazione=float(input("Valutazione (0-10): "))
                     lista_compiti[id]["valutazione"]=valutazione
                     lista_compiti[id]["stato"]="completato"
                     salva_compiti()
-                    print(f"✅ Valutazione {valutazione} registrata con successo per il compito {id}!")
+                    print(f"✅ Valutazione registrata con successo per il compito {id}!")
                     break
                 except ValueError:
                     print("❌ Devi inserire un valore numerico valido!")
@@ -263,6 +263,41 @@ while True:
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
     elif scelta=="i":
+        medie={}
+        for matricola, info in lista_alunni.items():
+            if info["archiviato"]==False:
+                somma=0
+                conteggio=0
+                for compito in lista_compiti.values():
+                    if compito["alunno_matricola"]==matricola and compito["stato"]=="completato":
+                        somma+=compito["valutazione"]
+                        conteggio+=1
+                if conteggio>0:
+                    media=somma/conteggio
+                else:
+                    media=0
+                medie[matricola] = media
+        ranking=sorted(medie.items(), key=lambda item: item[1], reverse=True)
+        print("\n🏆 Ranking alunni per media voti:")
+        for i, (matricola, media) in enumerate(ranking, start=1):
+            nome = lista_alunni[matricola]["nome"]
+            cognome = lista_alunni[matricola]["cognome"]
+            print(f"{i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
+    elif scelta=="j":
+        non_completati={}
+        for id, compito in lista_compiti.items():
+            if compito["stato"]=="assegnato":
+                non_completati[id]=compito
+        if non_completati:
+            print("\n📋 Compiti non completati:")
+            for c in non_completati.values():
+                matr = c["alunno_matricola"]
+                nome = lista_alunni[matr]["nome"]
+                cognome = lista_alunni[matr]["cognome"]
+                print(f"- {c['id']}: {c['descrizione']} ({nome} {cognome}) Stato: {c['stato']}")
+        else:
+            print("✅ Nessun compito non completato!")
+    elif scelta=="k":
         print()
     elif scelta=="l":
         print()
