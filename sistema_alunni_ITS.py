@@ -1,7 +1,7 @@
 import os
 import json
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
 lista_alunni = {}
 
@@ -40,6 +40,17 @@ def salva_compiti():
     with open(compiti, "w", encoding="utf-8") as file:
         json.dump(lista_compiti, file, indent=4, ensure_ascii=False)
 
+def controlla_struttura(dati, campi_previsti):
+    for key, value in dati.items():
+        if not isinstance(value, dict):
+            print(f"❌ Errore: il valore di '{key}' non è un dizionario")
+            return False
+        if set(value.keys())!=campi_previsti:
+            print(f"❌ Errore: il record '{key}' non ha i campi corretti")
+            print("Campi trovati:", set(value.keys()))
+            print("Campi attesi:", campi_previsti)
+            return False
+    return True
 
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
@@ -93,6 +104,8 @@ while True:
         print(f"\n✅ Alunno '{nome} {cognome}' inserito con successo!")
         print(f"Matricola: {matricola}")
         print(f"Data creazione: {ora}")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="b":
         if not lista_alunni:
             print("\n⚠️ Nessun alunno registrato!")
@@ -109,6 +122,8 @@ while True:
                     print(f"Data creazione: {info['data_creazione']}")
             if not trovato:
                 print("⚠️ Nessun alunno attivo trovato!")
+        
+        input("\nPremi Invio per continuare...") 
     elif scelta=="c":
         matr=input("Matricola: ")
         if matr in lista_alunni:
@@ -152,6 +167,8 @@ while True:
                     modifica = input("Risposta non valida! Digita 's' o 'n': ").lower()
         else:
             print("❌ La matricola indicata non è presente!")
+        
+        input("\nPremi Invio per continuare...") 
     elif scelta=="d":
         matr=input("Matricola: ")
         if matr in lista_alunni:
@@ -181,6 +198,8 @@ while True:
                     print("❌ Scelta errata!")
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+        
+        input("\nPremi Invio per continuare...") 
     elif scelta=="e":
         id="TASK" + datetime.now().strftime("%Y%m%d%H%M%S")
         descrizione=input("Descrizione: ")
@@ -201,6 +220,8 @@ while True:
         print(f"\n✅ Compito '{descrizione}' inserito con successo!")
         print(f"Matricola: {matr}")
         print(f"Data assegnazione: {data_assegnazione}")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="f":
         id=input("ID compito: ")
         if id in lista_compiti:
@@ -219,6 +240,8 @@ while True:
                     print("❌ Devi inserire un valore numerico valido!")
         else:
             print("❌ L'ID inserito non corrisponde a nessun compito!")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="g":
         matr=input("Matricola: ")
         if matr in lista_alunni:
@@ -235,6 +258,8 @@ while True:
                 print("⚠️ Nessun compito trovato per questo studente!")
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="h":
         matr=input("Matricola: ")
         somma=0
@@ -263,6 +288,8 @@ while True:
                 print("Progressione voti:", *voti)
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="i":
         medie={}
         for matricola, info in lista_alunni.items():
@@ -284,6 +311,8 @@ while True:
             nome = lista_alunni[matricola]["nome"]
             cognome = lista_alunni[matricola]["cognome"]
             print(f"{i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="j":
         non_completati={}
         for id, compito in lista_compiti.items():
@@ -298,54 +327,93 @@ while True:
                 print(f"- {c['id']}: {c['descrizione']} ({nome} {cognome})")
         else:
             print("✅ Nessun compito non completato!")
-    elif scelta=="k":
-        print()
+
+        input("\nPremi Invio per continuare...") 
+    elif scelta == "k":
+        print("📦 Creazione backup...")
+        cartella = "backup"
+        if not os.path.exists(cartella):
+            os.makedirs(cartella)
+            print(f"✅ Cartella {cartella} creata!")
+        now=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        backup_alunni = os.path.join(cartella, "lista_alunni_" + now + ".json")
+        backup_compiti = os.path.join(cartella, "lista_compiti_" + now + ".json")
+        with open(backup_alunni, "w", encoding="utf-8") as f:
+            json.dump(lista_alunni, f, indent=4, ensure_ascii=False)
+        with open(backup_compiti, "w", encoding="utf-8") as f:
+            json.dump(lista_compiti, f, indent=4, ensure_ascii=False)
+        print("✅ File di backup creati con successo!")
+        print("📂 File presenti nella cartella backup:")
+        for nome in os.listdir(cartella):
+            percorso_file = os.path.join(cartella, nome)
+            giorni_pass = datetime.now()-timedelta(7)
+            data_creazione=datetime.fromtimestamp(os.path.getctime(percorso_file))
+            if giorni_pass>data_creazione:
+                os.remove(percorso_file)
+            else:
+                print("- ", nome)
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="l":
-        file_caricato = input("File JSON da caricare: ")
-        if file_caricato.endswith(".json"):
-            tipo = input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower()
+        file_caricato=input("File JSON da caricare: ")
+        if not file_caricato.endswith(".json"):
+            print("❌ L'estensione può essere esclusivamente '.json'")
+        elif not os.path.exists(file_caricato):
+            print("❌ Il file non esiste!")
+        else:
+            tipo=input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower()
             while tipo not in ['a', 'c']:
                 print("❌ Scelta errata! Riprova")
-                tipo = input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower()
-            if os.path.exists(file_caricato):
-                with open(file_caricato, "r", encoding="utf-8") as file:
-                    try:
-                        dati_caricati = json.load(file)
-                        if tipo == "a":
-                            inseriti = 0
-                            ignorati = 0
-                            for m, info in dati_caricati.items():
-                                if m not in lista_alunni:
-                                    lista_alunni[m] = info
-                                    inseriti += 1
-                                else:
-                                    ignorati += 1
-                            salva_alunni()
-                            print(f"✅ {inseriti} alunni caricati da {file_caricato}")
-                            if ignorati > 0:
-                                print(f"⚠️ {ignorati} matricole già presenti sono state ignorate")
-                        else:
-                            inseriti = 0
-                            ignorati = 0
-                            for id, compito in dati_caricati.items():
-                                if id not in lista_compiti:
-                                    lista_compiti[id] = compito
-                                    inseriti += 1
-                                else:
-                                    ignorati += 1
-                            salva_compiti()
-                            print(f"✅ {inseriti} compiti caricati da {file_caricato}")
-                            if ignorati > 0:
-                                print(f"⚠️ {ignorati} ID compiti già presenti sono stati ignorati")
-                    except json.JSONDecodeError:
-                        print("❌ Il file non è un JSON valido!")
+                tipo=input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower()
+            campi_alunni={"nome", "cognome", "email", "matricola", "data_creazione", "data_modifica", "archiviato"}
+            campi_compiti={"id", "descrizione", "alunno_matricola", "stato", "data_assegnazione", "valutazione"}
+            if tipo=="a":
+                campi_previsti=campi_alunni
             else:
-                print("❌ Il file non esiste!")
-        else:
-            print("L'estensione può essere esclusivamente '.json'")
+                campi_previsti=campi_compiti
+            print(f"📥 Caricamento file {file_caricato}...")
+            try:
+                with open(file_caricato, "r", encoding="utf-8") as file:
+                    dati_caricati=json.load(file)
+                if controlla_struttura(dati_caricati, campi_previsti):
+                    inseriti=0
+                    ignorati=0
+                    if tipo=="a":
+                        for m, info in dati_caricati.items():
+                            if m not in lista_alunni:
+                                lista_alunni[m]=info
+                                inseriti+=1
+                            else:
+                                ignorati+=1
+                        salva_alunni()
+                        print(f"✅ {inseriti} alunni caricati da {file_caricato}")
+                        if ignorati>0:
+                            print(f"⚠️ {ignorati} matricole già presenti sono state ignorate")
+                    else:
+                        for id, compito in dati_caricati.items():
+                            if id not in lista_compiti:
+                                if compito["alunno_matricola"] not in lista_alunni:
+                                    print(f"⚠️ Attenzione: il compito {id} punta a una matricola inesistente ({compito['alunno_matricola']})")
+                                    opzione=input("Vuoi caricarlo comunque? (s)ì/(n)o")
+                                    if opzione=="s":
+                                        lista_compiti[id]=compito
+                                        inseriti+=1
+                                else:
+                                    lista_compiti[id]=compito
+                                    inseriti+=1
+                            else:
+                                ignorati+=1
+                        salva_compiti()
+                        print(f"✅ {inseriti} compiti caricati da {file_caricato}")
+                        if ignorati>0:
+                            print(f"⚠️ {ignorati} ID compiti già presenti sono stati ignorati")
+                else:
+                    print("❌ Il file JSON non ha la struttura corretta. Caricamento annullato!")
+            except json.JSONDecodeError:
+                print("❌ Il file non è un JSON valido!")
+
+        input("\nPremi Invio per continuare...") 
     elif scelta=="m":
-        print()
-    elif scelta=="n":
         print()
         break
     else:

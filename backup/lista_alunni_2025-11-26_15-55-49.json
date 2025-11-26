@@ -52,32 +52,5 @@
         "data_creazione": "2025-11-25 20:15:30",
         "data_modifica": "2025-11-25 20:15:30",
         "archiviato": false
-    },
-    "MAT20251126173731": {
-        "nome": "Kevin",
-        "cognome": "Lasagna",
-        "email": "lasa.ke@gmail.com",
-        "matricola": "MAT20251126173731",
-        "data_creazione": "2025-11-26 17:37:31",
-        "data_modifica": "2025-11-26 17:37:31",
-        "archiviato": false
-    },
-    "MAT20251126173829": {
-        "nome": "Nicholas",
-        "cognome": "Latifi",
-        "email": "nicho.las@williams.en",
-        "matricola": "MAT20251126173829",
-        "data_creazione": "2025-11-26 17:38:29",
-        "data_modifica": "2025-11-26 17:38:29",
-        "archiviato": false
-    },
-    "MAT20251126173910": {
-        "nome": "Charles",
-        "cognome": "Leclerc",
-        "email": "char.le@ferrari.it",
-        "matricola": "MAT20251126173910",
-        "data_creazione": "2025-11-26 17:39:10",
-        "data_modifica": "2025-11-26 17:39:10",
-        "archiviato": false
     }
 }
