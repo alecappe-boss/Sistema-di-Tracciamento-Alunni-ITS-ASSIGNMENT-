@@ -52,6 +52,9 @@ def controlla_struttura(dati, campi_previsti):
             return False
     return True
 
+def pulisci_schermo():
+    os.system('cls')
+
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
     print("""\nSeleziona un opzione:
@@ -105,7 +108,8 @@ while True:
         print(f"Matricola: {matricola}")
         print(f"Data creazione: {ora}")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo() 
     elif scelta=="b":
         if not lista_alunni:
             print("\n⚠️ Nessun alunno registrato!")
@@ -124,6 +128,7 @@ while True:
                 print("⚠️ Nessun alunno attivo trovato!")
         
         input("\nPremi Invio per continuare...") 
+        pulisci_schermo()
     elif scelta=="c":
         matr=input("Matricola: ")
         if matr in lista_alunni:
@@ -168,7 +173,8 @@ while True:
         else:
             print("❌ La matricola indicata non è presente!")
         
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta=="d":
         matr=input("Matricola: ")
         if matr in lista_alunni:
@@ -199,7 +205,8 @@ while True:
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
         
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta=="e":
         id="TASK" + datetime.now().strftime("%Y%m%d%H%M%S")
         descrizione=input("Descrizione: ")
@@ -221,7 +228,8 @@ while True:
         print(f"Matricola: {matr}")
         print(f"Data assegnazione: {data_assegnazione}")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo() 
     elif scelta=="f":
         id=input("ID compito: ")
         if id in lista_compiti:
@@ -241,7 +249,8 @@ while True:
         else:
             print("❌ L'ID inserito non corrisponde a nessun compito!")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta=="g":
         matr=input("Matricola: ")
         if matr in lista_alunni:
@@ -259,7 +268,8 @@ while True:
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo() 
     elif scelta=="h":
         matr=input("Matricola: ")
         somma=0
@@ -289,7 +299,8 @@ while True:
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta=="i":
         medie={}
         for matricola, info in lista_alunni.items():
@@ -312,7 +323,8 @@ while True:
             cognome = lista_alunni[matricola]["cognome"]
             print(f"{i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo() 
     elif scelta=="j":
         non_completati={}
         for id, compito in lista_compiti.items():
@@ -328,7 +340,8 @@ while True:
         else:
             print("✅ Nessun compito non completato!")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta == "k":
         print("📦 Creazione backup...")
         cartella = "backup"
@@ -353,7 +366,8 @@ while True:
             else:
                 print("- ", nome)
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta=="l":
         file_caricato=input("File JSON da caricare: ")
         if not file_caricato.endswith(".json"):
@@ -412,7 +426,8 @@ while True:
             except json.JSONDecodeError:
                 print("❌ Il file non è un JSON valido!")
 
-        input("\nPremi Invio per continuare...") 
+        input("\nPremi Invio per continuare...")
+        pulisci_schermo()
     elif scelta=="m":
         print()
         break
