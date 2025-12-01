@@ -73,15 +73,28 @@ while True:
     m) Visualizza menu
     n) Esci""")
 
-    scelta=input("\nDigita un comando: ")
+    scelta=input("\nDigita un comando: ").lower()
     if scelta=="a":
-        nome=input("Nome: ")
-        cognome=input("Cognome: ")
-        email=input("Email: ")
+        nome=input("Nome: ").strip().title()
+        cognome=input("Cognome: ").strip().title()
+
+        if any(alunno["nome"] == nome and alunno["cognome"] == cognome for alunno in lista_alunni.values()):
+                opzione=input("❌ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s)ì - (n)o: ").lower()
+                while opzione not in ["s", "n"]:
+                    opzione=input("Scelta non valida. Riprova! (s)ì - (n)o: ").lower()
+                if opzione=="n":
+                    continue
+        
         while True:
-            while check(email) is False:
-                print("Indirizzo email non valido! Riprova")
-                email=input("Email: ")
+            email=input("Email: ").strip()
+            if not check(email):
+                print("❌ Formato email non valido!")
+                continue
+
+            if any(alunno["email"] == email for alunno in lista_alunni.values()):
+                print("❌ L'email inserita esiste già! Riprova.")
+                continue
+            
             if not email.endswith("allievi.itsdigitalacademy.it"):
                 opzione=input("Sei sicuro di voler inserire una mail esterna alla scuola? (s)ì/(n)o: ").lower()
                 while opzione not in ["s", "n"]:
