@@ -53,7 +53,7 @@ def controlla_struttura(dati, campi_previsti):
     return True
 
 def pulisci_schermo():
-    os.system('cls')
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
@@ -73,15 +73,29 @@ while True:
     m) Visualizza menu
     n) Esci""")
 
-    scelta=input("\nDigita un comando: ").lower()
+    scelta=input("\nDigita un comando: ").lower().strip()
     if scelta=="a":
-        nome=input("Nome: ").strip().title()
-        cognome=input("Cognome: ").strip().title()
+        while True:
+            nome = " ".join(input("Nome: ").strip().title().split())
+            if not nome:
+                continue
+            if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", nome):
+                print("❌ Il nome può contenere solo lettere e spazi. Riprova!")
+                continue
+            break
+        while True:
+            cognome = " ".join(input("Cognome: ").strip().title().split())
+            if not cognome:
+                continue
+            if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", cognome):
+                print("❌ Il cognome può contenere solo lettere e spazi. Riprova!")
+                continue
+            break
 
         if any(alunno["nome"] == nome and alunno["cognome"] == cognome for alunno in lista_alunni.values()):
-                opzione=input("❌ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s)ì - (n)o: ").lower()
+                opzione=input("❌ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s/n): ").lower()
                 while opzione not in ["s", "n"]:
-                    opzione=input("Scelta non valida. Riprova! (s)ì - (n)o: ").lower()
+                    opzione=input("Scelta non valida. Riprova! (s/n): ").lower().strip()
                 if opzione=="n":
                     continue
         
@@ -96,21 +110,60 @@ while True:
                 continue
             
             if not email.endswith("allievi.itsdigitalacademy.it"):
-                opzione=input("Sei sicuro di voler inserire una mail esterna alla scuola? (s)ì/(n)o: ").lower()
+                opzione=input("⚠️ Sei sicuro di voler inserire una mail esterna alla scuola? (s/n): ").lower().strip()
                 while opzione not in ["s", "n"]:
-                    opzione=input("Inserisci un'opzione valida (s)ì/(n)o: ").lower()
+                    opzione=input("Inserisci un'opzione valida (s/n): ").lower().strip()
                 if opzione == "s":
                     break
                 else:
-                    email = input("Inserisci una nuova email: ")
+                    continue
             else:
                 break
-        matricola="MAT" + datetime.now().strftime("%Y%m%d%H%M%S")
+        errato=True
+        while errato:
+            data_nascita=input("Data di nascita (giorno-mese-anno): ").strip()
+            formato_atteso = "%d-%m-%Y"
+            try:
+                data_validata = datetime.strptime(data_nascita, formato_atteso)
+                oggi = datetime.now()
+                if data_validata > oggi:
+                    print("❌ Errore: la data di nascita non può essere nel futuro. Riprova!")
+                    continue
+                data_nascita_iso = data_validata.strftime("%Y-%m-%d")
+                print("✅ Formato data corretto:", data_nascita_iso)
+                errato=False
+            except ValueError:
+                print("❌ Errore: Il formato della data non è corretto. Riprova!")
+        note=input("Note aggiuntive (facoltativo, premi Invio per lasciare vuoto): ").strip()
+        while True:
+            matricola="MAT" + datetime.now().strftime("%Y%m%d%H%M%S")
+            if matricola not in lista_alunni:
+                break
         ora=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        print("\n📋 Riepilogo dati alunno:")
+        print("-"*30)
+        print(f"Nome: {nome}")
+        print(f"Cognome: {cognome}")
+        print(f"Email: {email}")
+        print(f"Data di nascita: {data_nascita_iso}")
+        print(f"Note: {note}")
+        print(f"Matricola: {matricola}")
+        print("-"*30)
+
+        conferma=input("Confermi il salvataggio dei dati sopra indicati? (s/n): ").lower().strip()
+        if conferma != "s":
+            print("❌ Inserimento annullato.")
+            input("\nPremi Invio per tornare al menu...")
+            pulisci_schermo()
+            continue
+
         lista_alunni[matricola]={
             "nome": nome,
             "cognome": cognome,
             "email": email,
+            "data_nascita": data_nascita_iso,
+            "note": note,
             "matricola": matricola,
             "data_creazione":ora,
             "data_modifica":ora,
