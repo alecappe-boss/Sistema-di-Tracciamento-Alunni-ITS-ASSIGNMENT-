@@ -26,7 +26,7 @@ if os.path.exists(compiti):
             lista_compiti = {}
 
 def check(email):
-    regex=r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
+    regex = r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}$'
     if re.fullmatch(regex, email):
         return True
     else:
@@ -74,6 +74,7 @@ while True:
     n) Esci""")
 
     scelta=input("\nDigita un comando: ").lower().strip()
+    
     if scelta=="a":
         while True:
             nome = " ".join(input("Nome: ").strip().title().split())
@@ -83,6 +84,7 @@ while True:
                 print("❌ Il nome può contenere solo lettere e spazi. Riprova!")
                 continue
             break
+        
         while True:
             cognome = " ".join(input("Cognome: ").strip().title().split())
             if not cognome:
@@ -100,7 +102,7 @@ while True:
                     continue
         
         while True:
-            email=input("Email: ").strip()
+            email=" ".join(input("Email: ").strip().lower().split())
             if not check(email):
                 print("❌ Formato email non valido!")
                 continue
@@ -119,6 +121,7 @@ while True:
                     continue
             else:
                 break
+        
         errato=True
         while errato:
             data_nascita=input("Data di nascita (giorno-mese-anno): ").strip()
@@ -126,19 +129,37 @@ while True:
             try:
                 data_validata = datetime.strptime(data_nascita, formato_atteso)
                 oggi = datetime.now()
+                eta = oggi.year - data_validata.year - ((oggi.month, oggi.day) < (data_validata.month, data_validata.day))
                 if data_validata > oggi:
-                    print("❌ Errore: la data di nascita non può essere nel futuro. Riprova!")
-                    continue
-                data_nascita_iso = data_validata.strftime("%Y-%m-%d")
-                print("✅ Formato data corretto:", data_nascita_iso)
-                errato=False
+                    print("❌ Data futura non valida!")
+                elif eta < 18:
+                    print("❌ Lo studente deve avere almeno 18 anni.")
+                elif eta > 100:
+                    print("❌ Età troppo elevata per un iscritto.")
+                else:
+                    data_nascita_iso = data_validata.strftime("%Y-%m-%d")
+                    print("✅ Formato data corretto:", data_nascita_iso)
+                    errato=False
             except ValueError:
                 print("❌ Errore: Il formato della data non è corretto. Riprova!")
-        note=input("Note aggiuntive (facoltativo, premi Invio per lasciare vuoto): ").strip()
+        
+        opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower()
+        while opzione not in ['s', 'n']:
+            print("Errore: scelta non corretta. Riprova!")
+            opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower()
+        if opzione == 's':
+            note=input("Note aggiuntive (max 500 caratteri): ").strip()
+            while len(note) > 500:
+                print("Errore: limite massimo di caratteri superato. Riprova!")
+                note=input("Note aggiuntive (max 500 caratteri): ").strip()
+        else:
+            note = ""
+        
         while True:
             matricola="MAT" + datetime.now().strftime("%Y%m%d%H%M%S")
             if matricola not in lista_alunni:
                 break
+        
         ora=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         print("\n📋 Riepilogo dati alunno:")
@@ -151,8 +172,14 @@ while True:
         print(f"Matricola: {matricola}")
         print("-"*30)
 
-        conferma=input("Confermi il salvataggio dei dati sopra indicati? (s/n): ").lower().strip()
-        if conferma != "s":
+        while True:
+            conferma=input("Confermi il salvataggio dei dati sopra indicati? (s/n): ").lower().strip()
+            if conferma not in ['s', 'n']:
+                print("❌ Errore: scelta errata. Riprova!")
+            else:
+                break
+
+        if conferma == "n":
             print("❌ Inserimento annullato.")
             input("\nPremi Invio per tornare al menu...")
             pulisci_schermo()
@@ -169,13 +196,16 @@ while True:
             "data_modifica":ora,
             "archiviato": False
         }
+        
         salva_alunni()
+        
         print(f"\n✅ Alunno '{nome} {cognome}' inserito con successo!")
         print(f"Matricola: {matricola}")
         print(f"Data creazione: {ora}")
 
         input("\nPremi Invio per continuare...")
         pulisci_schermo() 
+    
     elif scelta=="b":
         if not lista_alunni:
             print("\n⚠️ Nessun alunno registrato!")
