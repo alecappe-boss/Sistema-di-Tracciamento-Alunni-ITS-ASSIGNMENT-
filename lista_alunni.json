@@ -120,5 +120,16 @@
         "data_creazione": "2025-12-02 13:04:55",
         "data_modifica": "2025-12-02 13:04:55",
         "archiviato": false
+    },
+    "MAT20251204155230": {
+        "nome": "Romano",
+        "cognome": "Cappelletto",
+        "email": "po.lo@gmail.com",
+        "data_nascita": "1999-12-12",
+        "note": "",
+        "matricola": "MAT20251204155230",
+        "data_creazione": "2025-12-04 15:52:30",
+        "data_modifica": "2025-12-04 15:52:30",
+        "archiviato": false
     }
 }

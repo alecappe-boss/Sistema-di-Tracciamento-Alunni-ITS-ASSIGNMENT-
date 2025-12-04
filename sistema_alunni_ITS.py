@@ -66,7 +66,7 @@ while True:
     f) Registra valutazione
     g) Visualizza compiti di uno studente
     h) Visualizza statistiche alunno
-    i) Ranking alunni per media voti
+    i) Ranking alunni pegir media voti
     j) Report compiti non completati
     k) Salva dati (backup)
     l) Carica dati
@@ -211,8 +211,9 @@ while True:
             print("\n⚠️ Nessun alunno registrato!")
         else:
             trovato=False
-            print("\n📋 Alunni registrati:")
-            for matricola, info in lista_alunni.items():
+            lista_alunni_ordinata = sorted(lista_alunni.items(), key=lambda item: (item[1]['cognome'], item[1]['nome']))
+            print("\n📋 Alunni registrati in ordine alfabetico:")
+            for matricola, info in lista_alunni_ordinata:
                 if info["archiviato"] == False:
                     trovato=True
                     print(f"\nMatricola: {matricola}")
