@@ -70,8 +70,7 @@ while True:
     j) Report compiti non completati
     k) Salva dati (backup)
     l) Carica dati
-    m) Visualizza menu
-    n) Esci""")
+    m) Esci""")
 
     scelta=input("\nDigita un comando: ").lower().strip()
     
@@ -95,7 +94,7 @@ while True:
             break
 
         if any(alunno["nome"] == nome and alunno["cognome"] == cognome for alunno in lista_alunni.values()):
-                opzione=input("❌ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s/n): ").lower()
+                opzione=input("❌ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s/n): ").lower().strip()
                 while opzione not in ["s", "n"]:
                     opzione=input("Scelta non valida. Riprova! (s/n): ").lower().strip()
                 if opzione=="n":
@@ -143,10 +142,10 @@ while True:
             except ValueError:
                 print("❌ Errore: Il formato della data non è corretto. Riprova!")
         
-        opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower()
+        opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower().strip()
         while opzione not in ['s', 'n']:
             print("Errore: scelta non corretta. Riprova!")
-            opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower()
+            opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower().strip()
         if opzione == 's':
             note=input("Note aggiuntive (max 500 caratteri): ").strip()
             while len(note) > 500:
@@ -210,22 +209,86 @@ while True:
         if not lista_alunni:
             print("\n⚠️ Nessun alunno registrato!")
         else:
-            trovato=False
+            opzione = input("Quali alunni vuoi vedere? (f)requentanti, (a)rchiviati, (t)utti: ").lower().strip()
+            while opzione not in ['f', 'a', 't']:
+                print("Errore: scelta non corretta. Riprova!")
+                opzione = input("Quali alunni vuoi vedere? (f)requentanti, (a)rchiviati, (t)utti: ").lower().strip()
+            
             lista_alunni_ordinata = sorted(lista_alunni.items(), key=lambda item: (item[1]['cognome'], item[1]['nome']))
-            print("\n📋 Alunni registrati in ordine alfabetico:")
-            for matricola, info in lista_alunni_ordinata:
-                if info["archiviato"] == False:
-                    trovato=True
+
+            if opzione == 'f':
+                trovato=False
+                print("\n📋 Alunni attivi in ordine alfabetico:")
+                for matricola, info in lista_alunni_ordinata:
+                    if info["archiviato"] == False:
+                        trovato=True
+                        print(f"\nMatricola: {matricola}")
+                        print(f"Nome: {info['nome']}")
+                        print(f"Cognome: {info['cognome']}")
+                        print(f"E-mail: {info['email']}")
+                        print(f"Data creazione: {info['data_creazione']}")
+                        print("-" * 50)
+                if not trovato:
+                    print("⚠️ Nessun alunno attivo trovato!")
+                    opzione = input("Vuoi vedere comunque gli alunni archiviati? (s/n): ").lower().strip()
+                    while opzione not in ['s', 'n']:
+                        print("Errore: scelta non corretta. Riprova!")
+                        opzione = input("Vuoi vedere comunque gli alunni archiviati? (s/n): ").lower().strip()
+                    if opzione == 's':
+                        print("\n📋 Alunni archiviati in ordine alfabetico:")
+                        for matricola, info in lista_alunni_ordinata:
+                            print(f"\nMatricola: {matricola}")
+                            print(f"Nome: {info['nome']}")
+                            print(f"Cognome: {info['cognome']}")
+                            print(f"E-mail: {info['email']}")
+                            print(f"Data creazione: {info['data_creazione']}")
+                            print("-" * 50)
+            
+            elif opzione == 'a':
+                trovato=False
+                print("\n📋 Alunni archiviati in ordine alfabetico:")
+                for matricola, info in lista_alunni_ordinata:
+                    if info["archiviato"] == True:
+                        trovato=True
+                        print(f"\nMatricola: {matricola}")
+                        print(f"Nome: {info['nome']}")
+                        print(f"Cognome: {info['cognome']}")
+                        print(f"E-mail: {info['email']}")
+                        print(f"Data creazione: {info['data_creazione']}")
+                        print("-" * 50)
+                if not trovato:
+                    print("⚠️ Nessun alunno archiviato trovato!")
+                    opzione = input("Vuoi vedere comunque gli alunni frequentanti? (s/n): ").lower().strip()
+                    while opzione not in ['s', 'n']:
+                        print("Errore: scelta non corretta. Riprova!")
+                        opzione = input("Vuoi vedere comunque gli alunni frequentanti? (s/n): ").lower().strip()
+                    if opzione == 's':
+                        print("\n📋 Alunni attivi in ordine alfabetico:")
+                        for matricola, info in lista_alunni_ordinata:
+                            print(f"\nMatricola: {matricola}")
+                            print(f"Nome: {info['nome']}")
+                            print(f"Cognome: {info['cognome']}")
+                            print(f"E-mail: {info['email']}")
+                            print(f"Data creazione: {info['data_creazione']}")
+                            print("-" * 50)
+                
+            else:
+                print("\n📋 Elenco alunni in ordine alfabetico:")
+                for matricola, info in lista_alunni_ordinata:
                     print(f"\nMatricola: {matricola}")
                     print(f"Nome: {info['nome']}")
                     print(f"Cognome: {info['cognome']}")
                     print(f"E-mail: {info['email']}")
                     print(f"Data creazione: {info['data_creazione']}")
-            if not trovato:
-                print("⚠️ Nessun alunno attivo trovato!")
+                    if info['archiviato'] == False:
+                        print(f"Stato: attivo")
+                    else:
+                        print(f"Stato: archiviato")
+                    print("-" * 50)
         
         input("\nPremi Invio per continuare...") 
         pulisci_schermo()
+
     elif scelta=="c":
         matr=input("Matricola: ")
         if matr in lista_alunni:
