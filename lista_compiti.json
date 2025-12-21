@@ -3,9 +3,9 @@
         "id": "TASK20251124163501",
         "descrizione": "Ugo Foscolo - Vita e Opere",
         "alunno_matricola": "MAT20251121121806",
-        "stato": "assegnato",
+        "stato": "completato",
         "data_assegnazione": "2025-11-24 16:35:18",
-        "valutazione": -1
+        "valutazione": 9.0
     },
     "TASK20251124163529": {
         "id": "TASK20251124163529",
@@ -21,7 +21,8 @@
         "alunno_matricola": "MAT20251120223403",
         "stato": "assegnato",
         "data_assegnazione": "2025-11-24 16:36:11",
-        "valutazione": -1
+        "valutazione": -1,
+        "archiviato": true
     },
     "TASK20251124163613": {
         "id": "TASK20251124163613",

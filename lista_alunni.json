@@ -5,8 +5,8 @@
         "email": "cappelletto.alessandro2006@gmail.com",
         "matricola": "MAT20251120223403",
         "data_creazione": "2025-11-20 22:34:03",
-        "data_modifica": "2025-11-20 22:49:53",
-        "archiviato": false
+        "data_modifica": "2025-12-20 23:36:09",
+        "archiviato": true
     },
     "MAT20251121121806": {
         "nome": "Joele",
@@ -15,7 +15,7 @@
         "matricola": "MAT20251121121806",
         "data_creazione": "2025-11-21 12:18:06",
         "data_modifica": "2025-12-05 17:42:53",
-        "archiviato": true
+        "archiviato": false
     },
     "MAT20251124163454": {
         "nome": "Gemma",
@@ -24,15 +24,6 @@
         "matricola": "MAT20251124163454",
         "data_creazione": "2025-11-24 16:34:54",
         "data_modifica": "2025-11-24 16:34:54",
-        "archiviato": false
-    },
-    "MAT20251125200500": {
-        "nome": "Luca",
-        "cognome": "Rossi",
-        "email": "luca.rossi@gmail.com",
-        "matricola": "MAT20251125200500",
-        "data_creazione": "2025-11-25 20:05:00",
-        "data_modifica": "2025-11-25 20:05:00",
         "archiviato": false
     },
     "MAT20251125201015": {
@@ -59,8 +50,8 @@
         "email": "lasa.ke@gmail.com",
         "matricola": "MAT20251126173731",
         "data_creazione": "2025-11-26 17:37:31",
-        "data_modifica": "2025-11-26 17:37:31",
-        "archiviato": false
+        "data_modifica": "2025-12-20 14:22:21",
+        "archiviato": true
     },
     "MAT20251126173829": {
         "nome": "Nicholas",
@@ -71,32 +62,13 @@
         "data_modifica": "2025-11-26 17:38:29",
         "archiviato": false
     },
-    "MAT20251126173910": {
-        "nome": "Charles",
-        "cognome": "Leclerc",
-        "email": "char.le@ferrari.it",
-        "matricola": "MAT20251126173910",
-        "data_creazione": "2025-11-26 17:39:10",
-        "data_modifica": "2025-11-26 17:39:10",
-        "archiviato": false
-    },
     "MAT20251201173606": {
         "nome": "Kevin",
-        "cognome": "Lorini",
+        "cognome": "Larini",
         "email": "orso.nico56@gmail.com",
         "matricola": "MAT20251201173606",
         "data_creazione": "2025-12-01 17:36:06",
-        "data_modifica": "2025-12-01 17:36:06",
-        "archiviato": false
-    },
-    "MAT20251202114305": {
-        "nome": "Nicola",
-        "cognome": "Nanni",
-        "email": "nico.nano@gmail.com",
-        "data_nascita": "12-12-2336",
-        "matricola": "MAT20251202114305",
-        "data_creazione": "2025-12-02 11:43:05",
-        "data_modifica": "2025-12-02 11:43:05",
+        "data_modifica": "2025-12-19 22:55:46",
         "archiviato": false
     },
     "MAT20251202122236": {

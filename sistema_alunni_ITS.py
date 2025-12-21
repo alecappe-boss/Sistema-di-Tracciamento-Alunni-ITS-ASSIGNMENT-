@@ -2,6 +2,7 @@ import os
 import json
 import re
 from datetime import datetime, timedelta
+from statistics import mean
 
 lista_alunni = {}
 
@@ -66,7 +67,7 @@ while True:
     f) Registra valutazione
     g) Visualizza compiti di uno studente
     h) Visualizza statistiche alunno
-    i) Ranking alunni pegir media voti
+    i) Ranking alunni per media voti
     j) Report compiti non completati
     k) Salva dati (backup)
     l) Carica dati
@@ -193,7 +194,8 @@ while True:
             "matricola": matricola,
             "data_creazione":ora,
             "data_modifica":ora,
-            "archiviato": False
+            "archiviato": False,
+            "data_archiviazione": None
         }
         
         salva_alunni()
@@ -291,42 +293,106 @@ while True:
 
     elif scelta=="c":
         matr=input("Matricola: ")
+        
         if matr in lista_alunni:
+            alunno = lista_alunni[matr]
+            print("---- Riepologo dati studente ----")
+            print(f"\nMatricola: {matr}")
+            print(f"Nome: {alunno['nome']}")
+            print(f"Cognome: {alunno['cognome']}")
+            print(f"E-mail: {alunno['email']}")
+            print(f"Data creazione: {alunno['data_creazione']}")
+            print("-" * 50)
             modifica="s"
             while modifica=="s":
                 print("Cosa vuoi modificare?")
                 print("n) nome")
                 print("c) cognome")
                 print("e) e-mail")
-                opzione=input("Inserisci l'opzione desiderata: ").lower()
+                
+                opzione=input("\nInserisci l'opzione desiderata: ").lower()
                 while opzione not in ["n", "c", "e"]:
                     opzione=input("L'opzione inserita non esiste! Riprova: ").lower()
+                
                 if opzione=="n":
-                    new_name=input("Nuovo nome: ")
-                    lista_alunni[matr]["nome"]=new_name
+                    while True:
+                        new_nome = " ".join(input("Nuovo nome: ").strip().title().split())
+                        if not new_nome:
+                            continue
+                        if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", new_nome):
+                            print("❌ Il nome può contenere solo lettere e spazi. Riprova!")
+                            continue
+                        break
+                    conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    while conferma not in ['s', 'n']:
+                        print("Errore: scelta non corretta. Riprova!")
+                        conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    
+                    if conferma == 's':
+                        lista_alunni[matr]["nome"]=new_nome
+                    else:
+                        print("Operazione annullata")
+                
                 elif opzione=="c":
-                    new_cognome=input("Nuovo cognome: ")
-                    lista_alunni[matr]["cognome"]=new_cognome
+                    while True:
+                        new_cognome = " ".join(input("Nuovo cognome: ").strip().title().split())
+                        if not new_cognome:
+                            continue
+                        if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", new_cognome):
+                            print("❌ Il cognome può contenere solo lettere e spazi. Riprova!")
+                            continue
+                        break
+                    conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    while conferma not in ['s', 'n']:
+                        print("Errore: scelta non corretta. Riprova!")
+                        conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    
+                    if conferma == 's':
+                        lista_alunni[matr]["cognome"]=new_cognome
+                    else:
+                        print("Operazione annullata")
+                
                 elif opzione=="e":
                     while True:
-                        new_email = input("Nuova e-mail: ")
+                        new_email = " ".join(input("Nuova email: ").strip().lower().split())
                         if not check(new_email):
-                            print("❌ Formato e-mail errato! Riprova.")
-                        elif not new_email.endswith("allievi.itsdigitalacademy.it"):
-                            conferma = input("Sei sicuro di voler inserire una mail esterna alla scuola? (s)ì/(n)o: ").lower()
-                            while conferma not in ["s", "n"]:
-                                conferma = input("Risposta non valida. Digita 's' o 'n': ").lower()
-                            if conferma == "s":
-                                lista_alunni[matr]["email"] = new_email
+                            print("❌ Formato email non valido!")
+                            continue
+
+                        if any(alunno["email"] == new_email for alunno in lista_alunni.values()):
+                            print("❌ L'email inserita esiste già! Riprova.")
+                            continue
+                        
+                        if not new_email.endswith("allievi.itsdigitalacademy.it"):
+                            opzione=input("⚠️ Sei sicuro di voler inserire una mail esterna alla scuola? (s/n): ").lower().strip()
+                            while opzione not in ["s", "n"]:
+                                opzione=input("Inserisci un'opzione valida (s/n): ").lower().strip()
+                            if opzione == "s":
                                 break
                             else:
-                                print("Inserisci un'altra email.")
+                                continue
                         else:
-                            lista_alunni[matr]["email"] = new_email
                             break
+                    
+                    conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    while conferma not in ['s', 'n']:
+                        print("Errore: scelta non corretta. Riprova!")
+                        conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    if conferma == 's':
+                        lista_alunni[matr]["email"] = new_email
+                    else:
+                        print("Operazione annullata")
+
                 lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 salva_alunni()
                 print("✅ Dati modificati con successo!")
+                print("\n---- Riepologo dati studente ----")
+                print(f"\nMatricola: {matr}")
+                print(f"Nome: {alunno['nome']}")
+                print(f"Cognome: {alunno['cognome']}")
+                print(f"E-mail: {alunno['email']}")
+                print(f"Data creazione: {alunno['data_creazione']}")
+                print("-" * 50)
                 modifica=input(f"Vuoi modificare altri dati della matricola {matr}? (s)ì/(n)o: ").lower()
                 while modifica not in ["s", "n"]:
                     modifica = input("Risposta non valida! Digita 's' o 'n': ").lower()
@@ -335,85 +401,188 @@ while True:
         
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
-    elif scelta=="d":
-        matr=input("Matricola: ")
+
+    elif scelta == "d":
+        matr = input("Matricola: ")
+
         if matr in lista_alunni:
-            if lista_alunni[matr]["archiviato"]:
-                print("⚠️ Lo studente è già archiviato!")
-                elimina = input("Vuoi eliminarlo definitivamente? (s/n): ").lower()
-                if elimina == "s":
-                    lista_alunni.pop(matr)
-                    salva_alunni()
-                    print("✅ Alunno eliminato con successo!")
+            alunno = lista_alunni[matr]
+
+            print("\n---- Riepilogo dati studente ----")
+            print(f"\nMatricola: {matr}")
+            print(f"Nome: {alunno['nome']}")
+            print(f"Cognome: {alunno['cognome']}")
+            print(f"E-mail: {alunno['email']}")
+            print(f"Data creazione: {alunno['data_creazione']}")
+            print("-" * 50)
+
+            # Recupero compiti associati (attivi o archiviati)
+            compiti_associati = []
+            for compito in lista_compiti.values():
+                if compito["alunno_matricola"] == matr:
+                    compiti_associati.append(compito)
+
+            # ===============================
+            # CASO: STUDENTE GIÀ ARCHIVIATO
+            # ===============================
+            if alunno["archiviato"]:
+                print("⚠️ Lo studente è già archiviato.")
+
+                if compiti_associati:
+                    print("❌ Eliminazione definitiva NON consentita.")
+                    print("⚠️ Sono presenti compiti associati (storico da preservare).")
+                else:
+                    elimina = input("Vuoi eliminarlo definitivamente? (s/n): ").lower()
+                    if elimina == "s":
+                        conferma = input(f"Sei sicuro di voler eliminare definitivamente {alunno['nome']} {alunno['cognome']}? (s/n): ").lower()
+
+                        if conferma == "s":
+                            lista_alunni.pop(matr)
+                            salva_alunni()
+                            print("✅ Alunno eliminato definitivamente!")
+                        else:
+                            print("❌ Operazione annullata")
+
+            # ===============================
+            # CASO: STUDENTE NON ARCHIVIATO
+            # ===============================
             else:
-                soft=input("Vuoi (a)rchiviarlo o (e)limarlo definitivamente?: ")
-                if soft=="a":
-                    lista_alunni[matr]["archiviato"] = True
-                    lista_alunni[matr]["data_modifica"]=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    salva_alunni()
-                    print("✅ L'alunno è stato archiviato!")
-                elif soft=="e":
-                    conferma = input(f"Sei sicuro di voler eliminare definitivamente {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}? (s/n): ").lower()
+                soft = input("Vuoi (a)rchiviarlo o (e)liminarlo definitivamente?: ").lower()
+
+                while soft not in ["a", "e"]:
+                    soft = input("Scelta non valida. Digita 'a' o 'e': ").lower()
+
+                # -------- ARCHIVIAZIONE --------
+                if soft == "a":
+                    conferma = input(f"Sei sicuro di voler archiviare {alunno['nome']} {alunno['cognome']}? (s/n): ").lower()
+
                     if conferma == "s":
-                        lista_alunni.pop(matr)
+                        lista_alunni[matr]["archiviato"] = True
+                        lista_alunni[matr]["data_archiviazione"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        lista_alunni[matr]["data_modifica"] = lista_alunni[matr]["data_archiviazione"]
+
+                        # Archivia anche i compiti associati
+                        for compito in compiti_associati:
+                            compito["stato"] = "archiviato"
+
                         salva_alunni()
-                        print("✅ Alunno eliminato con successo!")
+                        salva_compiti()
+                        print("✅ Studente e compiti associati archiviati con successo!")
                     else:
                         print("❌ Operazione annullata")
+
+                # -------- ELIMINAZIONE --------
                 else:
-                    print("❌ Scelta errata!")
+                    if compiti_associati:
+                        print("⚠️ Attenzione: lo studente ha compiti associati.")
+                        scelta = input("Vuoi archiviare studente e compiti invece di eliminarli? (s/n): ").lower()
+
+                        if scelta == "s":
+                            lista_alunni[matr]["archiviato"] = True
+                            lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+                            for compito in compiti_associati:
+                                compito["stato"] = "archiviato"
+
+                            salva_alunni()
+                            salva_compiti()
+                            print("✅ Studente e compiti archiviati con successo!")
+                        else:
+                            print("❌ Eliminazione annullata per preservare i dati")
+                    else:
+                        conferma = input(f"Sei sicuro di voler eliminare definitivamente {alunno['nome']} {alunno['cognome']}? (s/n): ").lower()
+
+                        if conferma == "s":
+                            lista_alunni.pop(matr)
+                            salva_alunni()
+                            print("✅ Alunno eliminato definitivamente!")
+                        else:
+                            print("❌ Operazione annullata")
+
         else:
-            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
-        
+            print("❌ La matricola inserita non corrisponde a nessuno studente!")
+
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
+
     elif scelta=="e":
         id="TASK" + datetime.now().strftime("%Y%m%d%H%M%S")
-        descrizione=input("Descrizione: ")
+        descrizione=input("Descrizione: ").strip()
+        while len(descrizione) < 5 or len(descrizione) > 200:
+            print("🚫 Descrizione non valida. Lunghezza consentita: 5–200 caratteri.")
+            descrizione=input("Descrizione: ").strip()
         matr=input("Matricola: ")
         while matr not in lista_alunni:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
             matr=input("Matricola: ")
-        data_assegnazione=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        lista_compiti[id]={
-            "id": id,
-            "descrizione": descrizione,
-            "alunno_matricola": matr,
-            "stato": "assegnato",
-            "data_assegnazione": data_assegnazione,
-            "valutazione": -1
-        }
-        salva_compiti()
-        print(f"\n✅ Compito '{descrizione}' inserito con successo!")
-        print(f"Matricola: {matr}")
-        print(f"Data assegnazione: {data_assegnazione}")
+        if lista_alunni[matr]['archiviato']:
+            print("❌ Impossibile assegnare compiti a uno studente archiviato")
+        else:
+            data_assegnazione=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            lista_compiti[id]={
+                "id": id,
+                "descrizione": descrizione,
+                "alunno_matricola": matr,
+                "stato": "assegnato",
+                "data_assegnazione": data_assegnazione,
+                "valutazione": -1
+            }
+            salva_compiti()
+            print(f"\n✅ Compito '{descrizione}' inserito con successo!")
+            print(f"Matricola: {matr}")
+            print(f"Data assegnazione: {data_assegnazione}")
 
         input("\nPremi Invio per continuare...")
-        pulisci_schermo() 
-    elif scelta=="f":
-        id=input("ID compito: ")
+        pulisci_schermo()
+
+    elif scelta == "f":
+        id = input("ID compito: ")
+
         if id in lista_compiti:
-            while True:
-                try:
-                    valutazione=float(input("Valutazione (0-10): "))
-                    while valutazione<3 or valutazione>10:
-                        print("❌ Devi insere una valutazione compresa tra 3 e 10!")
-                        valutazione=float(input("Valutazione (0-10): "))
-                    lista_compiti[id]["valutazione"]=valutazione
-                    lista_compiti[id]["stato"]="completato"
+            compito = lista_compiti[id]
+            alunno_id = compito["alunno_matricola"]
+            studente = lista_alunni[alunno_id]
+
+            if lista_alunni[alunno_id]["archiviato"]:
+                print("❌ Lo studente è archiviato. Impossibile registrare valutazioni!")
+
+            elif compito["stato"] == "archiviato":
+                print("❌ Il compito è archiviato perché lo studente è archiviato")
+
+            elif compito["stato"] == "completato":
+                print("⚠️ Il compito è già stato valutato!")
+
+            else:
+                while True:
+                    try:
+                        valutazione = float(input("Valutazione (3-10): "))
+                        if 3 <= valutazione <= 10:
+                            break
+                        print("❌ Devi inserire una valutazione compresa tra 3 e 10!")
+                    except ValueError:
+                        print("❌ Devi inserire un valore numerico valido!")
+                
+                conferma = input(f"Confermi di voler registrare la valutazione {valutazione} per {studente['nome']} {studente['cognome']}? (s/n): ").lower().strip()
+                while conferma not in ['s', 'n']:
+                    conferma = input("❌ Risposta non valida. Digita s/n: ").lower().strip()
+                if conferma == 's':
+                    compito["valutazione"] = valutazione
+                    compito["stato"] = "completato"
                     salva_compiti()
                     print(f"✅ Valutazione registrata con successo per il compito {id}!")
-                    break
-                except ValueError:
-                    print("❌ Devi inserire un valore numerico valido!")
+                else:
+                    print("❌ Operazione annullata!")
         else:
             print("❌ L'ID inserito non corrisponde a nessun compito!")
 
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
+
     elif scelta=="g":
         matr=input("Matricola: ")
         if matr in lista_alunni:
+            if lista_alunni[matr]["archiviato"]:
+                print("⚠️ Studente archiviato!")
             trovati=False
             print(f"\n📋 Compiti di {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}:")
             for compito in lista_compiti.values():
@@ -426,41 +595,61 @@ while True:
             if not trovati:
                 print("⚠️ Nessun compito trovato per questo studente!")
         else:
-            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+            print("❌ La matricola inserita non corrisponde a nessuno studente!")
 
         input("\nPremi Invio per continuare...")
-        pulisci_schermo() 
-    elif scelta=="h":
-        matr=input("Matricola: ")
-        somma=0
-        assegnato=0
-        completato=0
-        voti = []
-        if matr in lista_alunni:
+        pulisci_schermo()
+
+    elif scelta == "h":
+        matr = input("Matricola: ").strip()
+
+        if matr not in lista_alunni:
+            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+        else:
+            studente = lista_alunni[matr]
+
+            print(f"\n📋 Statistiche di {studente['nome']} {studente['cognome']}:")
+
+            if studente["archiviato"]:
+                print("⚠️ Studente archiviato!")
+
+            voti = []
+            compiti_non_completati = []
+
+            # Ciclo sui compiti dello studente
             for compito in lista_compiti.values():
                 if compito["alunno_matricola"] == matr:
-                    if compito["stato"]=="completato":
-                        completato+=1
-                        somma+=compito["valutazione"]
+                    if compito["stato"] == "completato" and compito["valutazione"] != -1:
                         voti.append(compito["valutazione"])
-                    else:
-                        assegnato+=1
-            print(f"\n📋 Statistiche di {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}:")
-            print(f"Compiti completati: {completato}")
-            print(f"Compiti assegnati: {assegnato}")
-            if completato>0:
-                media=somma/(completato)
+                    elif compito["stato"] == "assegnato":
+                        compiti_non_completati.append(compito["descrizione"])
+
+            completati = len(voti)
+            assegnati = len(compiti_non_completati)
+
+            # Stampa riepilogo generale
+            print(f"Compiti completati: {completati}")
+            print(f"Compiti assegnati/non completati: {assegnati}")
+
+            # Statistiche sui voti
+            if voti:
+                media = mean(voti)
                 voto_min = min(voti)
                 voto_max = max(voti)
                 print(f"Media voti: {media:.2f}")
                 print(f"Voto minimo: {voto_min}")
                 print(f"Voto massimo: {voto_max}")
-                print("Progressione voti:", *voti)
-        else:
-            print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
+                print("Progressione voti:", ", ".join(f"{v:.1f}" for v in voti))
+
+            # Elenco compiti non completati
+            if compiti_non_completati:
+                print("\nCompiti non completati:")
+                for c in compiti_non_completati:
+                    print("-", c)
 
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
+
     elif scelta=="i":
         medie={}
         for matricola, info in lista_alunni.items():
@@ -473,121 +662,251 @@ while True:
                         conteggio+=1
                 if conteggio>0:
                     media=somma/conteggio
+                    medie[matricola] = media
                 else:
-                    media=0
-                medie[matricola] = media
-        ranking=sorted(medie.items(), key=lambda item: item[1], reverse=True)
+                    medie[matricola] = None
+
+        # Ordinamento: media decrescente, poi cognome, poi nome, gestendo None
+        ranking=sorted(
+            medie.items(),
+            key=lambda item: (
+                -(item[1] if item[1] is not None else -1),
+                lista_alunni[item[0]]['cognome'],
+                lista_alunni[item[0]]['nome']
+            )
+        )
+
         print("\n🏆 Ranking alunni per media voti:")
-        for i, (matricola, media) in enumerate(ranking, start=1):
-            nome = lista_alunni[matricola]["nome"]
-            cognome = lista_alunni[matricola]["cognome"]
-            print(f"{i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
+        if not medie:
+            print("⚠️ Nessun alunno attivo con voti registrati")
+        else:
+            for i, (matricola, media) in enumerate(ranking, start=1):
+                nome = lista_alunni[matricola]["nome"]
+                cognome = lista_alunni[matricola]["cognome"]
+                if media is not None:
+                    print(f"{i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
+                else:
+                    print(f"{i}. {nome} {cognome} ({matricola}) - Media: N/A")
 
         input("\nPremi Invio per continuare...")
-        pulisci_schermo() 
+        pulisci_schermo()
+
     elif scelta=="j":
         non_completati={}
+        
         for id, compito in lista_compiti.items():
-            if compito["stato"]=="assegnato":
+            matr = compito["alunno_matricola"]
+            if compito["stato"]=="assegnato" and not lista_alunni[matr]["archiviato"]:
                 non_completati[id]=compito
+        
         if non_completati:
+            non_completati_ordinati = sorted(non_completati.values(), key=lambda c: (lista_alunni[c["alunno_matricola"]]["cognome"], lista_alunni[c["alunno_matricola"]]["nome"],c["data_assegnazione"]))
+            
             print("\n📋 Compiti non completati:")
-            for c in non_completati.values():
+            
+            for c in non_completati_ordinati:
                 matr = c["alunno_matricola"]
                 nome = lista_alunni[matr]["nome"]
                 cognome = lista_alunni[matr]["cognome"]
-                print(f"- {c['id']}: {c['descrizione']} ({nome} {cognome})")
+                data = c["data_assegnazione"]
+                print(f"- {c['id']}: {c['descrizione']} ({nome} {cognome}) - Assegnato il {data}")
         else:
             print("✅ Nessun compito non completato!")
 
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
+
     elif scelta == "k":
         print("📦 Creazione backup...")
         cartella = "backup"
+        
         if not os.path.exists(cartella):
             os.makedirs(cartella)
             print(f"✅ Cartella {cartella} creata!")
+        
         now=datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         backup_alunni = os.path.join(cartella, "lista_alunni_" + now + ".json")
         backup_compiti = os.path.join(cartella, "lista_compiti_" + now + ".json")
-        with open(backup_alunni, "w", encoding="utf-8") as f:
-            json.dump(lista_alunni, f, indent=4, ensure_ascii=False)
-        with open(backup_compiti, "w", encoding="utf-8") as f:
-            json.dump(lista_compiti, f, indent=4, ensure_ascii=False)
-        print("✅ File di backup creati con successo!")
+       
+        try:
+            with open(backup_alunni, "w", encoding="utf-8") as f:
+                json.dump(lista_alunni, f, indent=4, ensure_ascii=False)
+            
+            with open(backup_compiti, "w", encoding="utf-8") as f:
+                json.dump(lista_compiti, f, indent=4, ensure_ascii=False)
+            
+            print("✅ File di backup creati con successo!")
+        except Exception as e:
+            print(f"❌ Errore durante la creazione dei backup: {e}")
+
+        limite_data = datetime.now() - timedelta(days=7)
         print("📂 File presenti nella cartella backup:")
-        for nome in os.listdir(cartella):
-            percorso_file = os.path.join(cartella, nome)
-            giorni_pass = datetime.now()-timedelta(7)
-            data_creazione=datetime.fromtimestamp(os.path.getctime(percorso_file))
-            if giorni_pass>data_creazione:
-                os.remove(percorso_file)
-            else:
-                print("- ", nome)
+        
+        # Lista solo file, ordinata per data di creazione
+        try:
+            files = [f for f in os.listdir(cartella) if os.path.isfile(os.path.join(cartella, f))]
+            files_sorted = sorted(files, key=lambda f: os.path.getctime(os.path.join(cartella, f)))
+
+            for nome in files_sorted:
+                percorso_file = os.path.join(cartella, nome)
+                try:
+                    data_creazione = datetime.fromtimestamp(os.path.getctime(percorso_file))
+                    if data_creazione < limite_data:
+                        os.remove(percorso_file)
+                    else:
+                        print("-", nome)
+                except Exception as e:
+                    print(f"⚠️ Impossibile gestire il file {nome}: {e}")
+        except Exception as e:
+            print(f"⚠️ Impossibile leggere la cartella {cartella}: {e}")
 
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
-    elif scelta=="l":
-        file_caricato=input("File JSON da caricare: ")
+
+    elif scelta == "l":
+        file_caricato = input("File JSON da caricare: ").strip()
+
         if not file_caricato.endswith(".json"):
             print("❌ L'estensione può essere esclusivamente '.json'")
         elif not os.path.exists(file_caricato):
             print("❌ Il file non esiste!")
         else:
-            tipo=input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower()
-            while tipo not in ['a', 'c']:
+            tipo = input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower().strip()
+            while tipo not in ["a", "c"]:
                 print("❌ Scelta errata! Riprova")
-                tipo=input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower()
-            campi_alunni={"nome", "cognome", "email", "matricola", "data_creazione", "data_modifica", "archiviato"}
-            campi_compiti={"id", "descrizione", "alunno_matricola", "stato", "data_assegnazione", "valutazione"}
-            if tipo=="a":
-                campi_previsti=campi_alunni
-            else:
-                campi_previsti=campi_compiti
+                tipo = input("Il file caricato contiene (a)lunni o (c)ompiti?: ").lower().strip()
+
+            campi_alunni = {
+                "nome", "cognome", "email", "data_nascita", "note",
+                "matricola", "data_creazione", "data_modifica",
+                "archiviato", "data_archiviazione"
+            }
+
+            campi_compiti = {
+                "id", "descrizione", "alunno_matricola",
+                "stato", "data_assegnazione", "valutazione"
+            }
+
+            campi_previsti = campi_alunni if tipo == "a" else campi_compiti
+
             print(f"📥 Caricamento file {file_caricato}...")
+
             try:
                 with open(file_caricato, "r", encoding="utf-8") as file:
-                    dati_caricati=json.load(file)
-                if controlla_struttura(dati_caricati, campi_previsti):
-                    inseriti=0
-                    ignorati=0
-                    if tipo=="a":
+                    dati_caricati = json.load(file)
+
+                if not controlla_struttura(dati_caricati, campi_previsti):
+                    print("❌ Il file JSON non ha la struttura corretta. Caricamento annullato!")
+                else:
+                    inseriti = 0
+                    ignorati = 0
+
+                    # =======================
+                    # CARICAMENTO ALUNNI
+                    # =======================
+                    if tipo == "a":
                         for m, info in dati_caricati.items():
+                            try:
+                                if not check(info["email"]):
+                                    print(f"⚠️ Email non valida per {m}")
+                                    ignorati += 1
+                                    continue
+
+                                if any(a["email"] == info["email"] for a in lista_alunni.values()):
+                                    print(f"⚠️ Email duplicata per {m}")
+                                    ignorati += 1
+                                    continue
+
+                                if not isinstance(info["archiviato"], bool):
+                                    print(f"⚠️ 'archiviato' non booleano per {m}")
+                                    ignorati += 1
+                                    continue
+
+                                datetime.strptime(info["data_creazione"], "%Y-%m-%d %H:%M:%S")
+                                datetime.strptime(info["data_modifica"], "%Y-%m-%d %H:%M:%S")
+
+                                if info["data_archiviazione"] is not None:
+                                    datetime.strptime(info["data_archiviazione"], "%Y-%m-%d %H:%M:%S")
+
+                            except Exception as e:
+                                print(f"⚠️ Errore validazione alunno {m}: {e}")
+                                ignorati += 1
+                                continue
+
                             if m not in lista_alunni:
-                                lista_alunni[m]=info
-                                inseriti+=1
+                                lista_alunni[m] = info
+                                inseriti += 1
                             else:
-                                ignorati+=1
+                                ignorati += 1
+
                         salva_alunni()
-                        print(f"✅ {inseriti} alunni caricati da {file_caricato}")
-                        if ignorati>0:
-                            print(f"⚠️ {ignorati} matricole già presenti sono state ignorate")
+                        print(f"✅ {inseriti} alunni caricati")
+                        if ignorati:
+                            print(f"⚠️ {ignorati} alunni ignorati")
+
+                    # =======================
+                    # CARICAMENTO COMPITI
+                    # =======================
                     else:
                         for id, compito in dati_caricati.items():
+                            try:
+                                if compito["stato"] not in ["assegnato", "completato", "archiviato"]:
+                                    print(f"⚠️ Stato non valido per compito {id}")
+                                    ignorati += 1
+                                    continue
+
+                                if not isinstance(compito["valutazione"], (int, float)) or not -1 <= compito["valutazione"] <= 10:
+                                    print(f"⚠️ Valutazione non valida per compito {id}")
+                                    ignorati += 1
+                                    continue
+
+                                if compito["stato"] == "assegnato" and compito["valutazione"] != -1:
+                                    print(f"⚠️ Compito {id}: valutazione presente ma stato assegnato")
+                                    ignorati += 1
+                                    continue
+
+                                if compito["stato"] == "completato" and compito["valutazione"] == -1:
+                                    print(f"⚠️ Compito {id}: completato senza valutazione")
+                                    ignorati += 1
+                                    continue
+
+                                datetime.strptime(compito["data_assegnazione"], "%Y-%m-%d %H:%M:%S")
+
+                                # 🔒 studente deve esistere
+                                matr = compito["alunno_matricola"]
+                                if matr not in lista_alunni:
+                                    print(f"❌ Compito {id}: studente {matr} inesistente")
+                                    ignorati += 1
+                                    continue
+
+                                # 🔒 compito archiviato solo se studente archiviato
+                                if compito["stato"] == "archiviato" and not lista_alunni[matr]["archiviato"]:
+                                    print(f"❌ Compito {id} archiviato ma studente attivo")
+                                    ignorati += 1
+                                    continue
+
+                            except Exception as e:
+                                print(f"⚠️ Errore validazione compito {id}: {e}")
+                                ignorati += 1
+                                continue
+
                             if id not in lista_compiti:
-                                if compito["alunno_matricola"] not in lista_alunni:
-                                    print(f"⚠️ Attenzione: il compito {id} punta a una matricola inesistente ({compito['alunno_matricola']})")
-                                    opzione=input("Vuoi caricarlo comunque? (s)ì/(n)o")
-                                    if opzione=="s":
-                                        lista_compiti[id]=compito
-                                        inseriti+=1
-                                else:
-                                    lista_compiti[id]=compito
-                                    inseriti+=1
+                                lista_compiti[id] = compito
+                                inseriti += 1
                             else:
-                                ignorati+=1
+                                ignorati += 1
+
                         salva_compiti()
-                        print(f"✅ {inseriti} compiti caricati da {file_caricato}")
-                        if ignorati>0:
-                            print(f"⚠️ {ignorati} ID compiti già presenti sono stati ignorati")
-                else:
-                    print("❌ Il file JSON non ha la struttura corretta. Caricamento annullato!")
-            except json.JSONDecodeError:
-                print("❌ Il file non è un JSON valido!")
+                        print(f"✅ {inseriti} compiti caricati")
+                        if ignorati:
+                            print(f"⚠️ {ignorati} compiti ignorati")
+
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                print(f"❌ Errore nel file JSON: {e}")
 
         input("\nPremi Invio per continuare...")
         pulisci_schermo()
+
     elif scelta=="m":
         print()
         break
