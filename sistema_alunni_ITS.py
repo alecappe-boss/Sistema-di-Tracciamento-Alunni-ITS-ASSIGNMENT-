@@ -1,5 +1,6 @@
 import os
 import json
+import csv
 import re
 from datetime import datetime, timedelta
 from statistics import mean
@@ -56,6 +57,125 @@ def controlla_struttura(dati, campi_previsti):
 def pulisci_schermo():
     os.system('cls' if os.name == 'nt' else 'clear')
 
+# =====================================
+# IMPORT / EXPORT CSV
+# =====================================
+
+def importa_alunni_csv(file_csv):
+    if not os.path.exists(file_csv):
+        print("❌ Il file CSV non esiste!")
+        return
+
+    inseriti = 0
+    ignorati = 0
+
+    with open(file_csv, newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            matricola = row.get("matricola")
+            nome = row.get("nome", "").title().strip()
+            cognome = row.get("cognome", "").title().strip()
+            email = row.get("email", "").strip().lower()
+            data_nascita = row.get("data_nascita")
+            note = row.get("note", "")
+
+            if not matricola or not nome or not cognome or not email or not data_nascita:
+                ignorati += 1
+                continue
+
+            if matricola in lista_alunni or any(a["email"] == email for a in lista_alunni.values()):
+                ignorati += 1
+                continue
+
+            lista_alunni[matricola] = {
+                "nome": nome,
+                "cognome": cognome,
+                "email": email,
+                "data_nascita": data_nascita,
+                "note": note,
+                "matricola": matricola,
+                "data_creazione": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "data_modifica": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "archiviato": False,
+                "data_archiviazione": None
+            }
+            inseriti += 1
+
+    salva_alunni()
+    print(f"✅ Alunni importati: {inseriti}, ignorati: {ignorati}")
+
+def esporta_alunni_csv(file_csv):
+    if not lista_alunni:
+        print("⚠️ Nessun alunno da esportare!")
+        return
+
+    campi = ["matricola", "nome", "cognome", "email", "data_nascita", "note", "archiviato"]
+
+    with open(file_csv, mode="w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=campi)
+        writer.writeheader()
+        for alunno in lista_alunni.values():
+            writer.writerow({campo: alunno.get(campo, "") for campo in campi})
+
+    print(f"✅ Alunni esportati in CSV: {file_csv}")
+
+def importa_compiti_csv(file_csv):
+    if not os.path.exists(file_csv):
+        print("❌ Il file CSV non esiste!")
+        return
+
+    inseriti = 0
+    ignorati = 0
+
+    with open(file_csv, newline="", encoding="utf-8") as csvfile:
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            id_compito = row.get("id")
+            matr = row.get("alunno_matricola")
+            descrizione = row.get("descrizione", "").strip()
+            stato = row.get("stato", "assegnato")
+            data_assegnazione = row.get("data_assegnazione", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+            try:
+                valutazione = float(row.get("valutazione", -1))
+            except ValueError:
+                valutazione = -1
+
+            if not id_compito or not matr or not descrizione:
+                ignorati += 1
+                continue
+
+            if id_compito in lista_compiti or matr not in lista_alunni:
+                ignorati += 1
+                continue
+
+            lista_compiti[id_compito] = {
+                "id": id_compito,
+                "descrizione": descrizione,
+                "alunno_matricola": matr,
+                "stato": stato,
+                "data_assegnazione": data_assegnazione,
+                "valutazione": valutazione
+            }
+            inseriti += 1
+
+    salva_compiti()
+    print(f"✅ Compiti importati: {inseriti}, ignorati: {ignorati}")
+
+def esporta_compiti_csv(file_csv):
+    if not lista_compiti:
+        print("⚠️ Nessun compito da esportare!")
+        return
+
+    campi = ["id", "descrizione", "alunno_matricola", "stato", "data_assegnazione", "valutazione"]
+
+    with open(file_csv, mode="w", newline="", encoding="utf-8") as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=campi)
+        writer.writeheader()
+        for compito in lista_compiti.values():
+            writer.writerow({campo: compito.get(campo, "") for campo in campi})
+
+    print(f"✅ Compiti esportati in CSV: {file_csv}")
+
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
     print("""\nSeleziona un opzione:
@@ -69,9 +189,11 @@ while True:
     h) Visualizza statistiche alunno
     i) Ranking alunni per media voti
     j) Report compiti non completati
-    k) Salva dati (backup)
-    l) Carica dati
-    m) Esci""")
+    k) Salva dati (backup) - JSON
+    l) Carica dati - JSON
+    m) Esporta dati CSV
+    n) Importa dati CSV
+    o) Esci""")
 
     scelta=input("\nDigita un comando: ").lower().strip()
     
@@ -939,8 +1061,28 @@ while True:
 
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
+    
+    elif scelta == "m":
+        file_csv = input("📄 Nome file CSV esportazione: ").strip()
+        tipo = input("Vuoi esportare (a)lunni o (c)ompiti?: ").lower().strip()
+        if tipo == "a":
+            esporta_alunni_csv(file_csv + ".csv")
+        else:
+            esporta_compiti_csv(file_csv + ".csv")
+        input("\n⏎ Premi Invio per continuare...")
+        pulisci_schermo()
 
-    elif scelta=="m":
+    elif scelta == "n":
+        file_csv = input("📄 Nome file CSV da importare: ").strip()
+        tipo = input("Vuoi importare (a)lunni o (c)ompiti?: ").lower().strip()
+        if tipo == "a":
+            importa_alunni_csv(file_csv + ".csv")
+        else:
+            importa_compiti_csv(file_csv + ".csv")
+        input("\n⏎ Premi Invio per continuare...")
+        pulisci_schermo()
+
+    elif scelta=="o":
         print()
         break
     else:

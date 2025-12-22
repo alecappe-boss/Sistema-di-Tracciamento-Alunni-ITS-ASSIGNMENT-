@@ -1,0 +1,13 @@
+matricola,nome,cognome,email,data_nascita,note,archiviato
+MAT20251120223403,Alessandro,Cappelletto,cappelletto.alessandro2006@gmail.com,,,True
+MAT20251121121806,Joele,Buffolo,joel.buf@gmail.com,,,False
+MAT20251124163454,Gemma,Capovilla,gemma.capo@gmail.com,,,False
+MAT20251125201015,Sara,Bianchi,sara.bianchi@gmail.com,,,False
+MAT20251125201530,Marco,Verdi,marco.verdi@gmail.com,,,False
+MAT20251126173731,Kevin,Lasagna,lasa.ke@gmail.com,,,True
+MAT20251126173829,Nicholas,Latifi,nicho.las@williams.en,,,False
+MAT20251201173606,Kevin,Larini,orso.nico56@gmail.com,,,False
+MAT20251202122236,Filippo,Berardi,bera.pera@allievi.itsdigitalacademy.it,2006-12-25,DSA,False
+MAT20251202130455,Edoardo,Colombo,colob.edo@gmail.com,1998-05-14,Intelligente,False
+MAT20251204155230,Romano,Cappelletto,po.lo@gmail.com,1999-12-12,,False
+MAT20251222102651,Pollo,Nico,orso.nico@gmail.com,2003-12-20,Indisciplinato,False
