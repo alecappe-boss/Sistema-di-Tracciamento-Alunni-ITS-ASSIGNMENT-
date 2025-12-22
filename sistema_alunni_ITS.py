@@ -48,8 +48,8 @@ def controlla_struttura(dati, campi_previsti):
             return False
         if set(value.keys())!=campi_previsti:
             print(f"❌ Errore: il record '{key}' non ha i campi corretti")
-            print("Campi trovati:", set(value.keys()))
-            print("Campi attesi:", campi_previsti)
+            print("✅ Campi trovati:", set(value.keys()))
+            print("✅ Campi attesi:", campi_previsti)
             return False
     return True
 
@@ -76,8 +76,10 @@ while True:
     scelta=input("\nDigita un comando: ").lower().strip()
     
     if scelta=="a":
+        print("\n🧑‍🎓 INSERIMENTO NUOVO ALUNNO\n")
+
         while True:
-            nome = " ".join(input("Nome: ").strip().title().split())
+            nome = " ".join(input("👤 Nome: ").strip().title().split())
             if not nome:
                 continue
             if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", nome):
@@ -86,7 +88,7 @@ while True:
             break
         
         while True:
-            cognome = " ".join(input("Cognome: ").strip().title().split())
+            cognome = " ".join(input("👤 Cognome: ").strip().title().split())
             if not cognome:
                 continue
             if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", cognome):
@@ -95,14 +97,14 @@ while True:
             break
 
         if any(alunno["nome"] == nome and alunno["cognome"] == cognome for alunno in lista_alunni.values()):
-                opzione=input("❌ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s/n): ").lower().strip()
+                opzione=input("⚠️ Esiste un alunno con lo stesso nome e cognome. Proseguire comunque? (s/n): ").lower().strip()
                 while opzione not in ["s", "n"]:
-                    opzione=input("Scelta non valida. Riprova! (s/n): ").lower().strip()
+                    opzione=input("⚠️ Scelta non valida. Riprova! (s/n): ").lower().strip()
                 if opzione=="n":
                     continue
         
         while True:
-            email=" ".join(input("Email: ").strip().lower().split())
+            email=" ".join(input("📧 Email: ").strip().lower().split())
             if not check(email):
                 print("❌ Formato email non valido!")
                 continue
@@ -114,7 +116,7 @@ while True:
             if not email.endswith("allievi.itsdigitalacademy.it"):
                 opzione=input("⚠️ Sei sicuro di voler inserire una mail esterna alla scuola? (s/n): ").lower().strip()
                 while opzione not in ["s", "n"]:
-                    opzione=input("Inserisci un'opzione valida (s/n): ").lower().strip()
+                    opzione=input("⚠️ Inserisci un'opzione valida (s/n): ").lower().strip()
                 if opzione == "s":
                     break
                 else:
@@ -124,7 +126,7 @@ while True:
         
         errato=True
         while errato:
-            data_nascita=input("Data di nascita (giorno-mese-anno): ").strip()
+            data_nascita=input("📅 Data di nascita (gg-mm-aaaa): ").strip()
             formato_atteso = "%d-%m-%Y"
             try:
                 data_validata = datetime.strptime(data_nascita, formato_atteso)
@@ -133,9 +135,9 @@ while True:
                 if data_validata > oggi:
                     print("❌ Data futura non valida!")
                 elif eta < 18:
-                    print("❌ Lo studente deve avere almeno 18 anni.")
+                    print("🚫 Lo studente deve avere almeno 18 anni.")
                 elif eta > 100:
-                    print("❌ Età troppo elevata per un iscritto.")
+                    print("🚫 Età troppo elevata per un iscritto.")
                 else:
                     data_nascita_iso = data_validata.strftime("%Y-%m-%d")
                     print("✅ Formato data corretto:", data_nascita_iso)
@@ -143,15 +145,15 @@ while True:
             except ValueError:
                 print("❌ Errore: Il formato della data non è corretto. Riprova!")
         
-        opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower().strip()
+        opzione = input("📝 Vuoi aggiungere delle note relative allo studente? (s/n): ").lower().strip()
         while opzione not in ['s', 'n']:
-            print("Errore: scelta non corretta. Riprova!")
-            opzione = input("Vuoi aggiungere delle note relative allo studente? (s/n): ").lower().strip()
+            print("❌ Errore: scelta non corretta. Riprova!")
+            opzione = input("📝 Vuoi aggiungere delle note relative allo studente? (s/n): ").lower().strip()
         if opzione == 's':
-            note=input("Note aggiuntive (max 500 caratteri): ").strip()
+            note=input("🗒️ Note aggiuntive (max 500 caratteri): ").strip()
             while len(note) > 500:
-                print("Errore: limite massimo di caratteri superato. Riprova!")
-                note=input("Note aggiuntive (max 500 caratteri): ").strip()
+                print("❌ Errore: limite massimo di caratteri superato. Riprova!")
+                note=input("🗒️ Note aggiuntive (max 500 caratteri): ").strip()
         else:
             note = ""
         
@@ -164,16 +166,16 @@ while True:
 
         print("\n📋 Riepilogo dati alunno:")
         print("-"*30)
-        print(f"Nome: {nome}")
-        print(f"Cognome: {cognome}")
-        print(f"Email: {email}")
-        print(f"Data di nascita: {data_nascita_iso}")
-        print(f"Note: {note}")
-        print(f"Matricola: {matricola}")
+        print(f"👤 Nome: {nome}")
+        print(f"👤 Cognome: {cognome}")
+        print(f"📧 Email: {email}")
+        print(f"📅 Data di nascita: {data_nascita_iso}")
+        print(f"🗒️ Note: {note}")
+        print(f"🆔 Matricola: {matricola}")
         print("-"*30)
 
         while True:
-            conferma=input("Confermi il salvataggio dei dati sopra indicati? (s/n): ").lower().strip()
+            conferma=input("✅ Confermi il salvataggio dei dati sopra indicati? (s/n): ").lower().strip()
             if conferma not in ['s', 'n']:
                 print("❌ Errore: scelta errata. Riprova!")
             else:
@@ -181,7 +183,7 @@ while True:
 
         if conferma == "n":
             print("❌ Inserimento annullato.")
-            input("\nPremi Invio per tornare al menu...")
+            input("\n⏎ Premi Invio per tornare al menu...")
             pulisci_schermo()
             continue
 
@@ -200,21 +202,23 @@ while True:
         
         salva_alunni()
         
-        print(f"\n✅ Alunno '{nome} {cognome}' inserito con successo!")
-        print(f"Matricola: {matricola}")
-        print(f"Data creazione: {ora}")
+        print(f"\n🎉 Alunno '{nome} {cognome}' inserito con successo!")
+        print(f"🆔 Matricola: {matricola}")
+        print(f"⏱️ Data creazione: {ora}")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo() 
     
     elif scelta=="b":
+        print("\n📂 VISUALIZZAZIONE ALUNNI\n")
+
         if not lista_alunni:
             print("\n⚠️ Nessun alunno registrato!")
         else:
-            opzione = input("Quali alunni vuoi vedere? (f)requentanti, (a)rchiviati, (t)utti: ").lower().strip()
+            opzione = input("👀 Quali alunni vuoi vedere? (f)requentanti, (a)rchiviati, (t)utti: ").lower().strip()
             while opzione not in ['f', 'a', 't']:
-                print("Errore: scelta non corretta. Riprova!")
-                opzione = input("Quali alunni vuoi vedere? (f)requentanti, (a)rchiviati, (t)utti: ").lower().strip()
+                print("❌ Errore: scelta non corretta. Riprova!")
+                opzione = input("👀 Quali alunni vuoi vedere? (f)requentanti, (a)rchiviati, (t)utti: ").lower().strip()
             
             lista_alunni_ordinata = sorted(lista_alunni.items(), key=lambda item: (item[1]['cognome'], item[1]['nome']))
 
@@ -224,26 +228,26 @@ while True:
                 for matricola, info in lista_alunni_ordinata:
                     if info["archiviato"] == False:
                         trovato=True
-                        print(f"\nMatricola: {matricola}")
-                        print(f"Nome: {info['nome']}")
-                        print(f"Cognome: {info['cognome']}")
-                        print(f"E-mail: {info['email']}")
-                        print(f"Data creazione: {info['data_creazione']}")
+                        print(f"\n🆔 Matricola: {matricola}")
+                        print(f"👤 Nome: {info['nome']}")
+                        print(f"👤 Cognome: {info['cognome']}")
+                        print(f"📧 E-mail: {info['email']}")
+                        print(f"⏱️ Data creazione: {info['data_creazione']}")
                         print("-" * 50)
                 if not trovato:
                     print("⚠️ Nessun alunno attivo trovato!")
-                    opzione = input("Vuoi vedere comunque gli alunni archiviati? (s/n): ").lower().strip()
+                    opzione = input("📂 Vuoi vedere comunque gli alunni archiviati? (s/n): ").lower().strip()
                     while opzione not in ['s', 'n']:
-                        print("Errore: scelta non corretta. Riprova!")
-                        opzione = input("Vuoi vedere comunque gli alunni archiviati? (s/n): ").lower().strip()
+                        print("❌ Errore: scelta non corretta. Riprova!")
+                        opzione = input("📂 Vuoi vedere comunque gli alunni archiviati? (s/n): ").lower().strip()
                     if opzione == 's':
                         print("\n📋 Alunni archiviati in ordine alfabetico:")
                         for matricola, info in lista_alunni_ordinata:
-                            print(f"\nMatricola: {matricola}")
-                            print(f"Nome: {info['nome']}")
-                            print(f"Cognome: {info['cognome']}")
-                            print(f"E-mail: {info['email']}")
-                            print(f"Data creazione: {info['data_creazione']}")
+                            print(f"\n🆔 Matricola: {matricola}")
+                            print(f"👤 Nome: {info['nome']}")
+                            print(f"👤 Cognome: {info['cognome']}")
+                            print(f"📧 E-mail: {info['email']}")
+                            print(f"⏱️ Data creazione: {info['data_creazione']}")
                             print("-" * 50)
             
             elif opzione == 'a':
@@ -252,109 +256,111 @@ while True:
                 for matricola, info in lista_alunni_ordinata:
                     if info["archiviato"] == True:
                         trovato=True
-                        print(f"\nMatricola: {matricola}")
-                        print(f"Nome: {info['nome']}")
-                        print(f"Cognome: {info['cognome']}")
-                        print(f"E-mail: {info['email']}")
-                        print(f"Data creazione: {info['data_creazione']}")
+                        print(f"\n🆔 Matricola: {matricola}")
+                        print(f"👤 Nome: {info['nome']}")
+                        print(f"👤 Cognome: {info['cognome']}")
+                        print(f"📧 E-mail: {info['email']}")
+                        print(f"⏱️ Data creazione: {info['data_creazione']}")
                         print("-" * 50)
                 if not trovato:
                     print("⚠️ Nessun alunno archiviato trovato!")
-                    opzione = input("Vuoi vedere comunque gli alunni frequentanti? (s/n): ").lower().strip()
+                    opzione = input("👀 Vuoi vedere comunque gli alunni frequentanti? (s/n): ").lower().strip()
                     while opzione not in ['s', 'n']:
-                        print("Errore: scelta non corretta. Riprova!")
-                        opzione = input("Vuoi vedere comunque gli alunni frequentanti? (s/n): ").lower().strip()
+                        print("❌ Errore: scelta non corretta. Riprova!")
+                        opzione = input("👀 Vuoi vedere comunque gli alunni frequentanti? (s/n): ").lower().strip()
                     if opzione == 's':
                         print("\n📋 Alunni attivi in ordine alfabetico:")
                         for matricola, info in lista_alunni_ordinata:
-                            print(f"\nMatricola: {matricola}")
-                            print(f"Nome: {info['nome']}")
-                            print(f"Cognome: {info['cognome']}")
-                            print(f"E-mail: {info['email']}")
-                            print(f"Data creazione: {info['data_creazione']}")
+                            print(f"\n🆔 Matricola: {matricola}")
+                            print(f"👤 Nome: {info['nome']}")
+                            print(f"👤 Cognome: {info['cognome']}")
+                            print(f"📧 E-mail: {info['email']}")
+                            print(f"⏱️ Data creazione: {info['data_creazione']}")
                             print("-" * 50)
                 
             else:
                 print("\n📋 Elenco alunni in ordine alfabetico:")
                 for matricola, info in lista_alunni_ordinata:
-                    print(f"\nMatricola: {matricola}")
-                    print(f"Nome: {info['nome']}")
-                    print(f"Cognome: {info['cognome']}")
-                    print(f"E-mail: {info['email']}")
-                    print(f"Data creazione: {info['data_creazione']}")
+                    print(f"\n🆔 Matricola: {matricola}")
+                    print(f"👤 Nome: {info['nome']}")
+                    print(f"👤 Cognome: {info['cognome']}")
+                    print(f"📧 E-mail: {info['email']}")
+                    print(f"⏱️ Data creazione: {info['data_creazione']}")
                     if info['archiviato'] == False:
-                        print(f"Stato: attivo")
+                        print(f"🟢 Stato: attivo")
                     else:
-                        print(f"Stato: archiviato")
+                        print(f"📦 Stato: archiviato")
                     print("-" * 50)
         
-        input("\nPremi Invio per continuare...") 
+        input("\n⏎ Premi Invio per continuare...") 
         pulisci_schermo()
 
     elif scelta=="c":
-        matr=input("Matricola: ")
+        print("\n✏️ MODIFICA DATI ALUNNO\n")
+
+        matr=input("🆔 Matricola: ").strip()
         
         if matr in lista_alunni:
             alunno = lista_alunni[matr]
-            print("---- Riepologo dati studente ----")
-            print(f"\nMatricola: {matr}")
-            print(f"Nome: {alunno['nome']}")
-            print(f"Cognome: {alunno['cognome']}")
-            print(f"E-mail: {alunno['email']}")
-            print(f"Data creazione: {alunno['data_creazione']}")
+            print("📋 ---- Riepilogo dati studente ----")
+            print(f"\n🆔 Matricola: {matr}")
+            print(f"👤 Nome: {alunno['nome']}")
+            print(f"👤 Cognome: {alunno['cognome']}")
+            print(f"📧 E-mail: {alunno['email']}")
+            print(f"⏱️ Data creazione: {alunno['data_creazione']}")
             print("-" * 50)
             modifica="s"
             while modifica=="s":
-                print("Cosa vuoi modificare?")
-                print("n) nome")
-                print("c) cognome")
-                print("e) e-mail")
+                print("✏️ Cosa vuoi modificare?")
+                print("👤 n) nome")
+                print("👤 c) cognome")
+                print("📧 e) e-mail")
                 
-                opzione=input("\nInserisci l'opzione desiderata: ").lower()
+                opzione=input("\n➡️ Inserisci l'opzione desiderata: ").lower().strip()
                 while opzione not in ["n", "c", "e"]:
-                    opzione=input("L'opzione inserita non esiste! Riprova: ").lower()
+                    opzione=input("❌ Opzione non valida! Riprova: ").lower().strip()
                 
                 if opzione=="n":
                     while True:
-                        new_nome = " ".join(input("Nuovo nome: ").strip().title().split())
+                        new_nome = " ".join(input("👤 Nuovo nome: ").strip().title().split())
                         if not new_nome:
                             continue
                         if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", new_nome):
                             print("❌ Il nome può contenere solo lettere e spazi. Riprova!")
                             continue
                         break
-                    conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    conferma = input("✅ Vuoi salvare queste modifiche? (s/n): ").lower().strip()
                     while conferma not in ['s', 'n']:
-                        print("Errore: scelta non corretta. Riprova!")
-                        conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                        print("❌ Errore: scelta non corretta. Riprova!")
+                        conferma = input("✅ Vuoi salvare queste modifiche? (s/n): ").lower().strip()
                     
                     if conferma == 's':
                         lista_alunni[matr]["nome"]=new_nome
                     else:
-                        print("Operazione annullata")
+                        print("🚫 Operazione annullata")
                 
                 elif opzione=="c":
                     while True:
-                        new_cognome = " ".join(input("Nuovo cognome: ").strip().title().split())
+                        new_cognome = " ".join(input("👤 Nuovo cognome: ").strip().title().split())
                         if not new_cognome:
                             continue
                         if not re.fullmatch(r"[A-Za-zÀ-ÖØ-öø-ÿ\s]+", new_cognome):
                             print("❌ Il cognome può contenere solo lettere e spazi. Riprova!")
                             continue
                         break
-                    conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    conferma = input("✅ Vuoi salvare queste modifiche? (s/n): ").lower().strip()
                     while conferma not in ['s', 'n']:
-                        print("Errore: scelta non corretta. Riprova!")
-                        conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                        print("❌ Errore: scelta non corretta. Riprova!")
+                        conferma = input("✅ Vuoi salvare queste modifiche? (s/n): ").lower().strip()
                     
                     if conferma == 's':
                         lista_alunni[matr]["cognome"]=new_cognome
                     else:
-                        print("Operazione annullata")
+                        print("🚫 Operazione annullata")
                 
                 elif opzione=="e":
                     while True:
-                        new_email = " ".join(input("Nuova email: ").strip().lower().split())
+                        new_email = " ".join(input("📧 Nuova email: ").strip().lower().split())
                         if not check(new_email):
                             print("❌ Formato email non valido!")
                             continue
@@ -366,7 +372,7 @@ while True:
                         if not new_email.endswith("allievi.itsdigitalacademy.it"):
                             opzione=input("⚠️ Sei sicuro di voler inserire una mail esterna alla scuola? (s/n): ").lower().strip()
                             while opzione not in ["s", "n"]:
-                                opzione=input("Inserisci un'opzione valida (s/n): ").lower().strip()
+                                opzione=input("⚠️ Inserisci un'opzione valida (s/n): ").lower().strip()
                             if opzione == "s":
                                 break
                             else:
@@ -374,46 +380,50 @@ while True:
                         else:
                             break
                     
-                    conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                    conferma = input("✅ Vuoi salvare queste modifiche? (s/n): ").lower().strip()
                     while conferma not in ['s', 'n']:
-                        print("Errore: scelta non corretta. Riprova!")
-                        conferma = input("Vuoi salvare queste modifiche? (s/n): ")
+                        print("❌ Errore: scelta non corretta. Riprova!")
+                        conferma = input("✅ Vuoi salvare queste modifiche? (s/n): ").lower().strip()
                     if conferma == 's':
                         lista_alunni[matr]["email"] = new_email
                     else:
-                        print("Operazione annullata")
+                        print("🚫 Operazione annullata")
 
                 lista_alunni[matr]["data_modifica"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 salva_alunni()
+                
                 print("✅ Dati modificati con successo!")
-                print("\n---- Riepologo dati studente ----")
-                print(f"\nMatricola: {matr}")
-                print(f"Nome: {alunno['nome']}")
-                print(f"Cognome: {alunno['cognome']}")
-                print(f"E-mail: {alunno['email']}")
-                print(f"Data creazione: {alunno['data_creazione']}")
+                print("\n📋 ---- Riepilogo dati studente ----")
+                print(f"\n🆔 Matricola: {matr}")
+                print(f"👤 Nome: {alunno['nome']}")
+                print(f"👤 Cognome: {alunno['cognome']}")
+                print(f"📧 E-mail: {alunno['email']}")
+                print(f"⏱️ Data creazione: {alunno['data_creazione']}")
                 print("-" * 50)
-                modifica=input(f"Vuoi modificare altri dati della matricola {matr}? (s)ì/(n)o: ").lower()
+                
+                modifica=input(f"🔁 Vuoi modificare altri dati della matricola {matr}? (s)ì/(n)o: ").lower().strip()
                 while modifica not in ["s", "n"]:
-                    modifica = input("Risposta non valida! Digita 's' o 'n': ").lower()
+                    modifica = input("❌ Risposta non valida! Digita 's' o 'n': ").lower().strip()
         else:
             print("❌ La matricola indicata non è presente!")
         
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta == "d":
-        matr = input("Matricola: ")
+        print("\n🗄️ ARCHIVIAZIONE / ELIMINAZIONE ALUNNO\n")
+        
+        matr = input("🆔 Matricola: ").strip().upper()
 
         if matr in lista_alunni:
             alunno = lista_alunni[matr]
 
-            print("\n---- Riepilogo dati studente ----")
-            print(f"\nMatricola: {matr}")
-            print(f"Nome: {alunno['nome']}")
-            print(f"Cognome: {alunno['cognome']}")
-            print(f"E-mail: {alunno['email']}")
-            print(f"Data creazione: {alunno['data_creazione']}")
+            print("\n📋 ---- Riepilogo dati studente ----")
+            print(f"\n🆔 Matricola: {matr}")
+            print(f"👤 Nome: {alunno['nome']}")
+            print(f"👤 Cognome: {alunno['cognome']}")
+            print(f"📧 E-mail: {alunno['email']}")
+            print(f"⏱️ Data creazione: {alunno['data_creazione']}")
             print("-" * 50)
 
             # Recupero compiti associati (attivi o archiviati)
@@ -430,31 +440,31 @@ while True:
 
                 if compiti_associati:
                     print("❌ Eliminazione definitiva NON consentita.")
-                    print("⚠️ Sono presenti compiti associati (storico da preservare).")
+                    print("📦 Sono presenti compiti associati (storico da preservare).")
                 else:
-                    elimina = input("Vuoi eliminarlo definitivamente? (s/n): ").lower()
+                    elimina = input("🗑️ Vuoi eliminarlo definitivamente? (s/n): ").lower().strip()
                     if elimina == "s":
-                        conferma = input(f"Sei sicuro di voler eliminare definitivamente {alunno['nome']} {alunno['cognome']}? (s/n): ").lower()
+                        conferma = input(f"⚠️ Sei sicuro di voler eliminare definitivamente {alunno['nome']} {alunno['cognome']}? (s/n): ").lower().strip()
 
                         if conferma == "s":
                             lista_alunni.pop(matr)
                             salva_alunni()
                             print("✅ Alunno eliminato definitivamente!")
                         else:
-                            print("❌ Operazione annullata")
+                            print("🚫 Operazione annullata")
 
             # ===============================
             # CASO: STUDENTE NON ARCHIVIATO
             # ===============================
             else:
-                soft = input("Vuoi (a)rchiviarlo o (e)liminarlo definitivamente?: ").lower()
+                soft = input("➡️ Vuoi (a)rchiviarlo o (e)liminarlo definitivamente?: ").lower().strip()
 
                 while soft not in ["a", "e"]:
-                    soft = input("Scelta non valida. Digita 'a' o 'e': ").lower()
+                    soft = input("❌ Scelta non valida. Digita 'a' o 'e': ").lower().strip()
 
                 # -------- ARCHIVIAZIONE --------
                 if soft == "a":
-                    conferma = input(f"Sei sicuro di voler archiviare {alunno['nome']} {alunno['cognome']}? (s/n): ").lower()
+                    conferma = input(f"📦 Sei sicuro di voler archiviare {alunno['nome']} {alunno['cognome']}? (s/n): ").lower().strip()
 
                     if conferma == "s":
                         lista_alunni[matr]["archiviato"] = True
@@ -469,13 +479,13 @@ while True:
                         salva_compiti()
                         print("✅ Studente e compiti associati archiviati con successo!")
                     else:
-                        print("❌ Operazione annullata")
+                        print("🚫 Operazione annullata")
 
                 # -------- ELIMINAZIONE --------
                 else:
                     if compiti_associati:
                         print("⚠️ Attenzione: lo studente ha compiti associati.")
-                        scelta = input("Vuoi archiviare studente e compiti invece di eliminarli? (s/n): ").lower()
+                        scelta = input("📦 Vuoi archiviare studente e compiti invece di eliminarli? (s/n): ").lower().strip()
 
                         if scelta == "s":
                             lista_alunni[matr]["archiviato"] = True
@@ -488,35 +498,40 @@ while True:
                             salva_compiti()
                             print("✅ Studente e compiti archiviati con successo!")
                         else:
-                            print("❌ Eliminazione annullata per preservare i dati")
+                            print("🚫 Eliminazione annullata per preservare i dati")
                     else:
-                        conferma = input(f"Sei sicuro di voler eliminare definitivamente {alunno['nome']} {alunno['cognome']}? (s/n): ").lower()
+                        conferma = input(f"🗑️ Sei sicuro di voler eliminare definitivamente {alunno['nome']} {alunno['cognome']}? (s/n): ").lower().strip()
 
                         if conferma == "s":
                             lista_alunni.pop(matr)
                             salva_alunni()
                             print("✅ Alunno eliminato definitivamente!")
                         else:
-                            print("❌ Operazione annullata")
+                            print("🚫 Operazione annullata")
 
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente!")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta=="e":
+        print("\n📝 ASSEGNA NUOVO COMPITO\n")
+
         id="TASK" + datetime.now().strftime("%Y%m%d%H%M%S")
-        descrizione=input("Descrizione: ").strip()
+        
+        descrizione=input("📝 Descrizione: ").strip()
         while len(descrizione) < 5 or len(descrizione) > 200:
             print("🚫 Descrizione non valida. Lunghezza consentita: 5–200 caratteri.")
-            descrizione=input("Descrizione: ").strip()
-        matr=input("Matricola: ")
+            descrizione=input("📝 Descrizione: ").strip()
+        
+        matr=input("🆔 Matricola studente: ").strip()
         while matr not in lista_alunni:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
-            matr=input("Matricola: ")
+            matr=input("🆔 Matricola studente: ").strip()
+        
         if lista_alunni[matr]['archiviato']:
-            print("❌ Impossibile assegnare compiti a uno studente archiviato")
+            print("🚫 Impossibile assegnare compiti a uno studente archiviato")
         else:
             data_assegnazione=datetime.now().strftime("%Y-%m-%d %H:%M:%S")
             lista_compiti[id]={
@@ -527,16 +542,21 @@ while True:
                 "data_assegnazione": data_assegnazione,
                 "valutazione": -1
             }
+            
             salva_compiti()
-            print(f"\n✅ Compito '{descrizione}' inserito con successo!")
-            print(f"Matricola: {matr}")
-            print(f"Data assegnazione: {data_assegnazione}")
+            print(f"\n✅ Compito inserito con successo!")
+            print(f"🆔 ID Compito: {id}")
+            print(f"📝 Descrizione: {descrizione}")
+            print(f"👤 Matricola studente: {matr}")
+            print(f"⏱️ Data assegnazione: {data_assegnazione}")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta == "f":
-        id = input("ID compito: ")
+        print("\n⭐ REGISTRA VALUTAZIONE COMPITO\n")
+
+        id = input("🆔 ID compito: ").strip().upper()
 
         if id in lista_compiti:
             compito = lista_compiti[id]
@@ -544,64 +564,73 @@ while True:
             studente = lista_alunni[alunno_id]
 
             if lista_alunni[alunno_id]["archiviato"]:
-                print("❌ Lo studente è archiviato. Impossibile registrare valutazioni!")
+                print("🚫 Lo studente è archiviato. Impossibile registrare valutazioni!")
 
             elif compito["stato"] == "archiviato":
-                print("❌ Il compito è archiviato perché lo studente è archiviato")
+                print("📦 Il compito è archiviato perché lo studente è archiviato")
 
             elif compito["stato"] == "completato":
                 print("⚠️ Il compito è già stato valutato!")
 
             else:
+                print(f"\n📋 Compito: {compito['descrizione']}")
+                print(f"👤 Studente: {studente['nome']} {studente['cognome']}")
+
                 while True:
                     try:
-                        valutazione = float(input("Valutazione (3-10): "))
+                        valutazione = float(input("⭐ Valutazione (3-10): "))
                         if 3 <= valutazione <= 10:
                             break
                         print("❌ Devi inserire una valutazione compresa tra 3 e 10!")
                     except ValueError:
                         print("❌ Devi inserire un valore numerico valido!")
                 
-                conferma = input(f"Confermi di voler registrare la valutazione {valutazione} per {studente['nome']} {studente['cognome']}? (s/n): ").lower().strip()
+                conferma = input(f"✅ Confermi di voler registrare la valutazione {valutazione} per {studente['nome']} {studente['cognome']}? (s/n): ").lower().strip()
                 while conferma not in ['s', 'n']:
                     conferma = input("❌ Risposta non valida. Digita s/n: ").lower().strip()
                 if conferma == 's':
                     compito["valutazione"] = valutazione
                     compito["stato"] = "completato"
                     salva_compiti()
-                    print(f"✅ Valutazione registrata con successo per il compito {id}!")
+                    print(f"🎉 Valutazione registrata con successo per il compito {id}!")
                 else:
-                    print("❌ Operazione annullata!")
+                    print("🚫 Operazione annullata!")
         else:
             print("❌ L'ID inserito non corrisponde a nessun compito!")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta=="g":
-        matr=input("Matricola: ")
+        print("\n📚 VISUALIZZA COMPITI PER STUDENTE\n")
+
+        matr=input("🆔 Matricola: ").strip()
         if matr in lista_alunni:
             if lista_alunni[matr]["archiviato"]:
                 print("⚠️ Studente archiviato!")
             trovati=False
             print(f"\n📋 Compiti di {lista_alunni[matr]['nome']} {lista_alunni[matr]['cognome']}:")
+            
             for compito in lista_compiti.values():
                 if compito["alunno_matricola"] == matr:
                     trovati=True
                     if compito["valutazione"]==-1:
-                        print(f"- ID: {compito['id']}, Descrizione: {compito['descrizione']}, Stato: {compito['stato']}")
+                        print(f"- 📝 ID: {compito['id']}, Descrizione: {compito['descrizione']}, Stato: {compito['stato']}")
                     else:
-                        print(f"- ID: {compito['id']}, Descrizione: {compito['descrizione']}, Stato: {compito['stato']}, Valutazione: {compito['valutazione']}")
+                        print(f"- 📝 ID: {compito['id']}, Descrizione: {compito['descrizione']}, Stato: {compito['stato']}, ⭐ Valutazione: {compito['valutazione']}")
+            
             if not trovati:
                 print("⚠️ Nessun compito trovato per questo studente!")
         else:
             print("❌ La matricola inserita non corrisponde a nessuno studente!")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta == "h":
-        matr = input("Matricola: ").strip()
+        print("\n📊 STATISTICHE STUDENTE\n")
+
+        matr = input("🆔 Matricola: ").strip().upper()
 
         if matr not in lista_alunni:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
@@ -628,29 +657,31 @@ while True:
             assegnati = len(compiti_non_completati)
 
             # Stampa riepilogo generale
-            print(f"Compiti completati: {completati}")
-            print(f"Compiti assegnati/non completati: {assegnati}")
+            print(f"✅ Compiti completati: {completati}")
+            print(f"🕒 Compiti assegnati/non completati: {assegnati}")
 
             # Statistiche sui voti
             if voti:
                 media = mean(voti)
                 voto_min = min(voti)
                 voto_max = max(voti)
-                print(f"Media voti: {media:.2f}")
-                print(f"Voto minimo: {voto_min}")
-                print(f"Voto massimo: {voto_max}")
-                print("Progressione voti:", ", ".join(f"{v:.1f}" for v in voti))
+                print(f"📈 Media voti: {media:.2f}")
+                print(f"🔻 Voto minimo: {voto_min}")
+                print(f"🔺 Voto massimo: {voto_max}")
+                print("📉 Progressione voti:", ", ".join(f"{v:.1f}" for v in voti))
 
             # Elenco compiti non completati
             if compiti_non_completati:
-                print("\nCompiti non completati:")
+                print("\n📌 Compiti non completati:")
                 for c in compiti_non_completati:
-                    print("-", c)
+                    print("- 📝 ", c)
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta=="i":
+        print("\n🏆 CLASSIFICA ALUNNI PER MEDIA VOTI\n")
+
         medie={}
         for matricola, info in lista_alunni.items():
             if info["archiviato"]==False:
@@ -676,7 +707,7 @@ while True:
             )
         )
 
-        print("\n🏆 Ranking alunni per media voti:")
+        print("\n🏅 Ranking alunni per media voti:")
         if not medie:
             print("⚠️ Nessun alunno attivo con voti registrati")
         else:
@@ -684,11 +715,11 @@ while True:
                 nome = lista_alunni[matricola]["nome"]
                 cognome = lista_alunni[matricola]["cognome"]
                 if media is not None:
-                    print(f"{i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
+                    print(f"🏅 {i}. {nome} {cognome} ({matricola}) - Media: {media:.2f}")
                 else:
-                    print(f"{i}. {nome} {cognome} ({matricola}) - Media: N/A")
+                    print(f"📌 {i}. {nome} {cognome} ({matricola}) - Media: N/A")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta=="j":
@@ -702,18 +733,18 @@ while True:
         if non_completati:
             non_completati_ordinati = sorted(non_completati.values(), key=lambda c: (lista_alunni[c["alunno_matricola"]]["cognome"], lista_alunni[c["alunno_matricola"]]["nome"],c["data_assegnazione"]))
             
-            print("\n📋 Compiti non completati:")
+            print("\n📌 COMPITI NON COMPLETATI:")
             
             for c in non_completati_ordinati:
                 matr = c["alunno_matricola"]
                 nome = lista_alunni[matr]["nome"]
                 cognome = lista_alunni[matr]["cognome"]
                 data = c["data_assegnazione"]
-                print(f"- {c['id']}: {c['descrizione']} ({nome} {cognome}) - Assegnato il {data}")
+                print(f"- 📝 {c['id']}: {c['descrizione']} (👤 {nome} {cognome}) - ⏱️ Assegnato il {data}")
         else:
             print("✅ Nessun compito non completato!")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta == "k":
@@ -754,17 +785,19 @@ while True:
                     if data_creazione < limite_data:
                         os.remove(percorso_file)
                     else:
-                        print("-", nome)
+                        print("- 📄 ", nome)
                 except Exception as e:
                     print(f"⚠️ Impossibile gestire il file {nome}: {e}")
         except Exception as e:
             print(f"⚠️ Impossibile leggere la cartella {cartella}: {e}")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta == "l":
-        file_caricato = input("File JSON da caricare: ").strip()
+        print("\n📥 CARICAMENTO FILE JSON\n")
+
+        file_caricato = input("📄 File JSON da caricare: ").strip()
 
         if not file_caricato.endswith(".json"):
             print("❌ L'estensione può essere esclusivamente '.json'")
@@ -904,7 +937,7 @@ while True:
             except (json.JSONDecodeError, UnicodeDecodeError) as e:
                 print(f"❌ Errore nel file JSON: {e}")
 
-        input("\nPremi Invio per continuare...")
+        input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
     elif scelta=="m":
