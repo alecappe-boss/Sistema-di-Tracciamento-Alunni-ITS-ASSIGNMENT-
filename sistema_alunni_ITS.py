@@ -83,6 +83,11 @@ def importa_alunni_csv(file_csv):
                 ignorati += 1
                 continue
 
+            if not check(email):
+                print(f"⚠️ Email non valida per {nome} {cognome}: {email}")
+                ignorati += 1
+                continue
+
             if matricola in lista_alunni or any(a["email"] == email for a in lista_alunni.values()):
                 ignorati += 1
                 continue
@@ -188,12 +193,13 @@ while True:
     g) Visualizza compiti di uno studente
     h) Visualizza statistiche alunno
     i) Ranking alunni per media voti
-    j) Report compiti non completati
-    k) Salva dati (backup) - JSON
-    l) Carica dati - JSON
-    m) Esporta dati CSV
-    n) Importa dati CSV
-    o) Esci""")
+    j) Visualizza alunni per range di voti
+    k) Report compiti non completati
+    l) Salva dati (backup) - JSON
+    m) Carica dati - JSON
+    n) Esporta dati CSV
+    o) Importa dati CSV
+    p) Esci""")
 
     scelta=input("\nDigita un comando: ").lower().strip()
     
@@ -713,6 +719,7 @@ while True:
                 if conferma == 's':
                     compito["valutazione"] = valutazione
                     compito["stato"] = "completato"
+                    compito["data_completamento"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     salva_compiti()
                     print(f"🎉 Valutazione registrata con successo per il compito {id}!")
                 else:
@@ -772,6 +779,11 @@ while True:
                 if compito["alunno_matricola"] == matr:
                     if compito["stato"] == "completato" and compito["valutazione"] != -1:
                         voti.append(compito["valutazione"])
+                        # Calcolo tempo di esecuzione
+                        data_inizio = datetime.strptime(compito["data_assegnazione"], "%Y-%m-%d %H:%M:%S")
+                        data_fine = datetime.strptime(compito["data_completamento"], "%Y-%m-%d %H:%M:%S")
+                        durata = data_fine - data_inizio
+                        print(f"🕒 Compito '{compito['descrizione']}' completato in {durata}")
                     elif compito["stato"] == "assegnato":
                         compiti_non_completati.append(compito["descrizione"])
 
@@ -843,8 +855,51 @@ while True:
 
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
-
+    
     elif scelta=="j":
+        print("\n🎯 FILTRA ALUNNI PER RANGE DI VOTI\n")
+
+        try:
+            voto_min = float(input("📉 Inserisci voto minimo: "))
+            voto_max = float(input("📈 Inserisci voto massimo: "))
+        except ValueError:
+            print("❌ Valore non valido! Inserisci un numero.")
+            input("\n⏎ Premi Invio per tornare al menu...")
+            pulisci_schermo()
+            continue
+
+        if voto_min > voto_max:
+            print("❌ Il voto minimo non può essere maggiore del massimo!")
+            input("\n⏎ Premi Invio per tornare al menu...")
+            pulisci_schermo()
+            continue
+
+        alunni_filtrati = []
+
+        for matricola, info in lista_alunni.items():
+            if info["archiviato"]:
+                continue
+            voti = [c["valutazione"] for c in lista_compiti.values()
+                    if c["alunno_matricola"]==matricola and c["stato"]=="completato" and c["valutazione"]!=-1]
+            if voti:
+                media = mean(voti)
+                if voto_min <= media <= voto_max:
+                    alunni_filtrati.append((matricola, media))
+
+        if not alunni_filtrati:
+            print(f"⚠️ Nessun alunno trovato con media tra {voto_min} e {voto_max}")
+        else:
+            alunni_filtrati.sort(key=lambda x: x[1], reverse=True)  # ordinamento decrescente per media
+            print(f"\n📋 Alunni con media tra {voto_min} e {voto_max}:")
+            for matricola, media in alunni_filtrati:
+                nome = lista_alunni[matricola]["nome"]
+                cognome = lista_alunni[matricola]["cognome"]
+                print(f"- {nome} {cognome} ({matricola}) - Media: {media:.2f}")
+
+        input("\n⏎ Premi Invio per continuare...")
+        pulisci_schermo()
+
+    elif scelta=="k":
         non_completati={}
         
         for id, compito in lista_compiti.items():
@@ -869,7 +924,7 @@ while True:
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
-    elif scelta == "k":
+    elif scelta == "l":
         print("📦 Creazione backup...")
         cartella = "backup"
         
@@ -916,7 +971,7 @@ while True:
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
-    elif scelta == "l":
+    elif scelta == "m":
         print("\n📥 CARICAMENTO FILE JSON\n")
 
         file_caricato = input("📄 File JSON da caricare: ").strip()
@@ -1062,7 +1117,7 @@ while True:
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
     
-    elif scelta == "m":
+    elif scelta == "n":
         file_csv = input("📄 Nome file CSV esportazione: ").strip()
         tipo = input("Vuoi esportare (a)lunni o (c)ompiti?: ").lower().strip()
         if tipo == "a":
@@ -1072,7 +1127,7 @@ while True:
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
-    elif scelta == "n":
+    elif scelta == "o":
         file_csv = input("📄 Nome file CSV da importare: ").strip()
         tipo = input("Vuoi importare (a)lunni o (c)ompiti?: ").lower().strip()
         if tipo == "a":
@@ -1082,7 +1137,7 @@ while True:
         input("\n⏎ Premi Invio per continuare...")
         pulisci_schermo()
 
-    elif scelta=="o":
+    elif scelta=="p":
         print()
         break
     else:

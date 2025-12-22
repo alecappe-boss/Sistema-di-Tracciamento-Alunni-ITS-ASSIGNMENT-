@@ -39,5 +39,14 @@
         "stato": "assegnato",
         "data_assegnazione": "2025-12-22 10:53:50",
         "valutazione": -1
+    },
+    "TASK20251222153838": {
+        "id": "TASK20251222153838",
+        "descrizione": "ITS ass",
+        "alunno_matricola": "MAT20251222102651",
+        "stato": "completato",
+        "data_assegnazione": "2025-12-22 15:38:50",
+        "valutazione": 6.0,
+        "data_completamento": "2025-12-22 15:39:37"
     }
 }
