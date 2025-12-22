@@ -115,5 +115,17 @@
         "data_modifica": "2025-12-22 11:31:15",
         "archiviato": false,
         "data_archiviazione": null
+    },
+    "MAT20251223004448": {
+        "nome": "Joele",
+        "cognome": "Liquo",
+        "email": "ffdgdf@gfd.lo",
+        "data_nascita": "1996-10-14",
+        "note": "",
+        "matricola": "MAT20251223004448",
+        "data_creazione": "2025-12-23 00:44:48",
+        "data_modifica": "2025-12-23 00:44:48",
+        "archiviato": false,
+        "data_archiviazione": null
     }
 }

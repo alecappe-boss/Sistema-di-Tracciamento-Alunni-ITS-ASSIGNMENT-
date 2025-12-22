@@ -181,6 +181,46 @@ def esporta_compiti_csv(file_csv):
 
     print(f"✅ Compiti esportati in CSV: {file_csv}")
 
+# 🆕 NUOVO: ricerca studente per matricola / nome / cognome
+def cerca_studente(input_utente):
+    query = input_utente.strip().lower()
+
+    # Caso diretto: matricola
+    if query.upper() in lista_alunni:
+        return query.upper()
+
+    risultati = []
+
+    for matricola, alunno in lista_alunni.items():
+        nome = alunno["nome"].lower()
+        cognome = alunno["cognome"].lower()
+        nome_cognome = f"{nome} {cognome}"
+        cognome_nome = f"{cognome} {nome}"
+
+        if query in [nome, cognome, nome_cognome, cognome_nome]:
+            risultati.append(matricola)
+
+    if not risultati:
+        print("❌ Nessuno studente trovato")
+        return None
+
+    if len(risultati) == 1:
+        return risultati[0]
+
+    print("\n🔍 Più studenti trovati:")
+    for i, m in enumerate(risultati, start=1):
+        a = lista_alunni[m]
+        print(f"{i}) {a['nome']} {a['cognome']} – {m}")
+
+    while True:
+        try:
+            scelta = int(input("➡️ Seleziona uno studente: "))
+            if 1 <= scelta <= len(risultati):
+                return risultati[scelta - 1]
+        except ValueError:
+            pass
+        print("❌ Scelta non valida")
+
 while True:
     print("\nSISTEMA DI TRACCIAMENTO ALUNNI - ITS")
     print("""\nSeleziona un opzione:
@@ -426,7 +466,13 @@ while True:
     elif scelta=="c":
         print("\n✏️ MODIFICA DATI ALUNNO\n")
 
-        matr=input("🆔 Matricola: ").strip()
+        input_utente = input("🆔 Inserisci matricola, nome o cognome: ")
+        matr = cerca_studente(input_utente)
+
+        if matr is None:
+            input("\n⏎ Premi Invio per continuare...")
+            pulisci_schermo()
+            continue
         
         if matr in lista_alunni:
             alunno = lista_alunni[matr]
@@ -541,7 +587,13 @@ while True:
     elif scelta == "d":
         print("\n🗄️ ARCHIVIAZIONE / ELIMINAZIONE ALUNNO\n")
         
-        matr = input("🆔 Matricola: ").strip().upper()
+        input_utente = input("🆔 Inserisci matricola, nome o cognome: ")
+        matr = cerca_studente(input_utente)
+
+        if matr is None:
+            input("\n⏎ Premi Invio per continuare...")
+            pulisci_schermo()
+            continue
 
         if matr in lista_alunni:
             alunno = lista_alunni[matr]
@@ -733,7 +785,14 @@ while True:
     elif scelta=="g":
         print("\n📚 VISUALIZZA COMPITI PER STUDENTE\n")
 
-        matr=input("🆔 Matricola: ").strip()
+        input_utente = input("🆔 Inserisci matricola, nome o cognome: ")
+        matr = cerca_studente(input_utente)
+
+        if matr is None:
+            input("\n⏎ Premi Invio per continuare...")
+            pulisci_schermo()
+            continue
+
         if matr in lista_alunni:
             if lista_alunni[matr]["archiviato"]:
                 print("⚠️ Studente archiviato!")
@@ -759,7 +818,13 @@ while True:
     elif scelta == "h":
         print("\n📊 STATISTICHE STUDENTE\n")
 
-        matr = input("🆔 Matricola: ").strip().upper()
+        input_utente = input("🆔 Inserisci matricola, nome o cognome: ")
+        matr = cerca_studente(input_utente)
+
+        if matr is None:
+            input("\n⏎ Premi Invio per continuare...")
+            pulisci_schermo()
+            continue
 
         if matr not in lista_alunni:
             print("❌ La matricola inserita non corrisponde a nessuno studente! Riprova")
