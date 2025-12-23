@@ -54,6 +54,36 @@ cd Sistema-di-Tracciamento-Alunni-ITS-ASSIGNMENT-
 python sistema_alunni_ITS.py
 ```
 
+## 📂 Struttura del Progetto
+
+```
+sistema-tracciamento-alunni/
+│
+├── sistema_alunni_ITS.py       # File principale dell'applicazione
+├── README.md                    # Documentazione del progetto
+│
+├── lista_alunni.json           # Database studenti (generato automaticamente)
+├── lista_compiti.json          # Database compiti (generato automaticamente)
+│
+└── backup/                      # Cartella backup automatici
+   ├── lista_alunni_2024-03-15_12-30-45.json
+   └── lista_compiti_2024-03-16_09-15-20.json
+```
+
+### Descrizione File
+
+- **sistema_alunni_ITS.py**: Contiene l'intera logica applicativa e il menu interattivo
+- **lista_alunni.json**: Database persistente degli studenti (creato al primo inserimento)
+- **lista_compiti.json**: Database persistente dei compiti (creato al primo inserimento)
+- **backup/**: Cartella per backup automatici con timestamp (creata automaticamente)
+
+### Note sulla Struttura
+
+- I file JSON vengono creati automaticamente alla prima esecuzione
+- La cartella `backup/` viene creata automaticamente al primo salvataggio
+- I backup più vecchi di 7 giorni vengono eliminati automaticamente
+- Non è necessario creare manualmente alcuna cartella o file all'installazione
+
 ## 📖 Utilizzo
 
 ### Menu Principale
@@ -241,7 +271,7 @@ MIT License – libero uso, modifica e distribuzione.
 
 ## 👥 Autori
 
-Cappelletto Alessandro - Sistema sviluppato per ITS Digital Academy
+**Cappelletto Alessandro** - Sistema sviluppato per ITS Digital Academy
 
 ## 📞 Supporto
 
