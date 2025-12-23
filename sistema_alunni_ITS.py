@@ -749,6 +749,16 @@ def menu_principale():
 
             input("\n⏎ Premi Invio per continuare...")
             pulisci_schermo()
+        
+        elif scelta=="d":
+            # QUESTA SEZIONE VA IMPLEMENTATA
+            print("\n🗑️ ELIMINA/ARCHIVIA ALUNNO\n")
+            input_utente = input("🆔 Inserisci matricola, nome o cognome: ")
+            matr = cerca_studente(input_utente)
+            if matr is not None:
+                gestione_alunno_d(matr)
+            input("\n⏎ Premi Invio per continuare...")
+            pulisci_schermo()
 
         elif scelta=="e":
             print("\n📝 ASSEGNA NUOVO COMPITO\n")

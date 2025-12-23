@@ -3,7 +3,7 @@
         "id": "TASK20251223134617",
         "descrizione": "San Marino - Storia",
         "alunno_matricola": "MAT20251223134347",
-        "stato": "assegnato",
+        "stato": "archiviato",
         "data_assegnazione": "2025-12-23 13:46:17",
         "valutazione": -1
     },
@@ -11,9 +11,18 @@
         "id": "TASK20251223134756",
         "descrizione": "PHP - compito",
         "alunno_matricola": "MAT20251223134347",
-        "stato": "completato",
+        "stato": "archiviato",
         "data_assegnazione": "2025-12-23 13:47:56",
         "valutazione": 4.0,
         "data_completamento": "2025-12-23 13:49:06"
+    },
+    "TASK20251223155559": {
+        "id": "TASK20251223155559",
+        "descrizione": "Don Bosco",
+        "alunno_matricola": "MAT20251223134737",
+        "stato": "completato",
+        "data_assegnazione": "2025-12-23 15:55:59",
+        "valutazione": 6.0,
+        "data_completamento": "2025-12-23 15:56:19"
     }
 }
