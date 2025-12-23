@@ -1,52 +1,19 @@
 {
-    "TASK20251124163501": {
-        "id": "TASK20251124163501",
-        "descrizione": "Ugo Foscolo - Vita e Opere",
-        "alunno_matricola": "MAT20251121121806",
-        "stato": "completato",
-        "data_assegnazione": "2025-11-24 16:35:18",
-        "valutazione": 9.0
-    },
-    "TASK20251124163529": {
-        "id": "TASK20251124163529",
-        "descrizione": "La letteratura veneta nel '600",
-        "alunno_matricola": "MAT20251121121806",
-        "stato": "completato",
-        "data_assegnazione": "2025-11-24 16:35:42",
-        "valutazione": 9.0
-    },
-    "TASK20251124163547": {
-        "id": "TASK20251124163547",
-        "descrizione": "Ferrari - Un sogno rosso",
-        "alunno_matricola": "MAT20251120223403",
+    "TASK20251223134617": {
+        "id": "TASK20251223134617",
+        "descrizione": "San Marino - Storia",
+        "alunno_matricola": "MAT20251223134347",
         "stato": "assegnato",
-        "data_assegnazione": "2025-11-24 16:36:11",
-        "valutazione": -1,
-        "archiviato": true
-    },
-    "TASK20251124163613": {
-        "id": "TASK20251124163613",
-        "descrizione": "San Marino - Che Passione",
-        "alunno_matricola": "MAT20251121121806",
-        "stato": "completato",
-        "data_assegnazione": "2025-11-24 16:36:35",
-        "valutazione": 6.5
-    },
-    "TASK20251222105342": {
-        "id": "TASK20251222105342",
-        "descrizione": "San Marino",
-        "alunno_matricola": "MAT20251125201530",
-        "stato": "assegnato",
-        "data_assegnazione": "2025-12-22 10:53:50",
+        "data_assegnazione": "2025-12-23 13:46:17",
         "valutazione": -1
     },
-    "TASK20251222153838": {
-        "id": "TASK20251222153838",
-        "descrizione": "ITS ass",
-        "alunno_matricola": "MAT20251222102651",
+    "TASK20251223134756": {
+        "id": "TASK20251223134756",
+        "descrizione": "PHP - compito",
+        "alunno_matricola": "MAT20251223134347",
         "stato": "completato",
-        "data_assegnazione": "2025-12-22 15:38:50",
-        "valutazione": 6.0,
-        "data_completamento": "2025-12-22 15:39:37"
+        "data_assegnazione": "2025-12-23 13:47:56",
+        "valutazione": 4.0,
+        "data_completamento": "2025-12-23 13:49:06"
     }
 }

@@ -1,130 +1,37 @@
 {
-    "MAT20251120223403": {
+    "MAT20251223134347": {
         "nome": "Alessandro",
-        "cognome": "Cappelletto",
+        "cognome": "Orso",
         "email": "cappelletto.alessandro2006@gmail.com",
-        "matricola": "MAT20251120223403",
-        "data_creazione": "2025-11-20 22:34:03",
-        "data_modifica": "2025-12-20 23:36:09",
-        "archiviato": true
-    },
-    "MAT20251121121806": {
-        "nome": "Joele",
-        "cognome": "Buffolo",
-        "email": "joel.buf@gmail.com",
-        "matricola": "MAT20251121121806",
-        "data_creazione": "2025-11-21 12:18:06",
-        "data_modifica": "2025-12-05 17:42:53",
-        "archiviato": false
-    },
-    "MAT20251124163454": {
-        "nome": "Gemma",
-        "cognome": "Capovilla",
-        "email": "gemma.capo@gmail.com",
-        "matricola": "MAT20251124163454",
-        "data_creazione": "2025-11-24 16:34:54",
-        "data_modifica": "2025-11-24 16:34:54",
-        "archiviato": false
-    },
-    "MAT20251125201015": {
-        "nome": "Sara",
-        "cognome": "Bianchi",
-        "email": "sara.bianchi@gmail.com",
-        "matricola": "MAT20251125201015",
-        "data_creazione": "2025-11-25 20:10:15",
-        "data_modifica": "2025-11-25 20:10:15",
-        "archiviato": false
-    },
-    "MAT20251125201530": {
-        "nome": "Marco",
-        "cognome": "Verdi",
-        "email": "marco.verdi@gmail.com",
-        "matricola": "MAT20251125201530",
-        "data_creazione": "2025-11-25 20:15:30",
-        "data_modifica": "2025-11-25 20:15:30",
-        "archiviato": false
-    },
-    "MAT20251126173731": {
-        "nome": "Kevin",
-        "cognome": "Lasagna",
-        "email": "lasa.ke@gmail.com",
-        "matricola": "MAT20251126173731",
-        "data_creazione": "2025-11-26 17:37:31",
-        "data_modifica": "2025-12-20 14:22:21",
-        "archiviato": true
-    },
-    "MAT20251126173829": {
-        "nome": "Nicholas",
-        "cognome": "Latifi",
-        "email": "nicho.las@williams.en",
-        "matricola": "MAT20251126173829",
-        "data_creazione": "2025-11-26 17:38:29",
-        "data_modifica": "2025-11-26 17:38:29",
-        "archiviato": false
-    },
-    "MAT20251201173606": {
-        "nome": "Kevin",
-        "cognome": "Larini",
-        "email": "orso.nico56@gmail.com",
-        "matricola": "MAT20251201173606",
-        "data_creazione": "2025-12-01 17:36:06",
-        "data_modifica": "2025-12-19 22:55:46",
-        "archiviato": false
-    },
-    "MAT20251202122236": {
-        "nome": "Filippo",
-        "cognome": "Berardi",
-        "email": "bera.pera@allievi.itsdigitalacademy.it",
-        "data_nascita": "2006-12-25",
-        "note": "DSA",
-        "matricola": "MAT20251202122236",
-        "data_creazione": "2025-12-02 12:22:36",
-        "data_modifica": "2025-12-02 12:22:36",
-        "archiviato": false
-    },
-    "MAT20251202130455": {
-        "nome": "Edoardo",
-        "cognome": "Colombo",
-        "email": "colob.edo@gmail.com",
-        "data_nascita": "1998-05-14",
-        "note": "Intelligente",
-        "matricola": "MAT20251202130455",
-        "data_creazione": "2025-12-02 13:04:55",
-        "data_modifica": "2025-12-02 13:04:55",
-        "archiviato": false
-    },
-    "MAT20251204155230": {
-        "nome": "Romano",
-        "cognome": "Cappelletto",
-        "email": "po.lo@gmail.com",
-        "data_nascita": "1999-12-12",
-        "note": "",
-        "matricola": "MAT20251204155230",
-        "data_creazione": "2025-12-04 15:52:30",
-        "data_modifica": "2025-12-04 15:52:30",
-        "archiviato": false
-    },
-    "MAT20251222102651": {
-        "nome": "Pollo",
-        "cognome": "Nico",
-        "email": "orso.nico@gmail.com",
-        "data_nascita": "2003-12-20",
-        "note": "Indisciplinato",
-        "matricola": "MAT20251222102651",
-        "data_creazione": "2025-12-22 10:26:51",
-        "data_modifica": "2025-12-22 11:31:15",
+        "data_nascita": "2006-10-15",
+        "note": "Lento",
+        "matricola": "MAT20251223134347",
+        "data_creazione": "2025-12-23 13:43:47",
+        "data_modifica": "2025-12-23 13:45:48",
         "archiviato": false,
         "data_archiviazione": null
     },
-    "MAT20251223004448": {
-        "nome": "Joele",
-        "cognome": "Liquo",
-        "email": "ffdgdf@gfd.lo",
-        "data_nascita": "1996-10-14",
+    "MAT20251223134737": {
+        "nome": "Kevin",
+        "cognome": "Lasagna",
+        "email": "kevin.lasagna@allievi.itsdigitalacademy.it",
+        "data_nascita": "1996-05-23",
         "note": "",
-        "matricola": "MAT20251223004448",
-        "data_creazione": "2025-12-23 00:44:48",
-        "data_modifica": "2025-12-23 00:44:48",
+        "matricola": "MAT20251223134737",
+        "data_creazione": "2025-12-23 13:47:37",
+        "data_modifica": "2025-12-23 13:47:37",
+        "archiviato": false,
+        "data_archiviazione": null
+    },
+    "MAT20251223134820": {
+        "nome": "Lollo",
+        "cognome": "Lacustre",
+        "email": "fgfd@gfdg.gfgd",
+        "data_nascita": "1963-09-14",
+        "note": "",
+        "matricola": "MAT20251223134820",
+        "data_creazione": "2025-12-23 13:48:20",
+        "data_modifica": "2025-12-23 13:48:20",
         "archiviato": false,
         "data_archiviazione": null
     }
